@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/recycler_section_header_height"
+    android:paddingLeft="@dimen/header_padding_left">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/dot"
+        android:layout_width="@dimen/dot_size"
+        android:layout_height="24dp"
+        android:layout_marginRight="@dimen/dot_padding_right"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/list_item_section_title"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="8dp"
+        android:background="@android:color/black"
+        android:fontFamily="sans-serif-light"
+        android:gravity="bottom"
+        android:paddingLeft="@dimen/header_textview_padding"
+        android:paddingRight="@dimen/header_textview_padding"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/list_item_section_sub_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/dot"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Title" />
+
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/list_item_section_sub_title"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@android:color/black"
+        android:fontFamily="sans-serif-light"
+        android:gravity="top"
+        android:paddingLeft="@dimen/header_textview_padding"
+        android:paddingRight="@dimen/header_textview_padding"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/list_item_section_title"
+        app:layout_constraintTop_toBottomOf="@+id/list_item_section_title"
+        tools:text="Sub Title" />
+
+</android.support.constraint.ConstraintLayout>
+
