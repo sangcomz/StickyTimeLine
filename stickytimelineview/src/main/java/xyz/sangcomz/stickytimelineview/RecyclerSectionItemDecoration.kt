@@ -20,8 +20,8 @@ import xyz.sangcomz.stickytimelineview.model.SectionInfo
 
 
 /**
- *  let me acknowledge @tim.paetz whose post inspired me to set off to a journey of implementing my own sticky headers using ItemDecorations.
- *  I borrowed some parts of his code in my implementation.
+ *  thanks to @tim.paetz
+ *  I was inspired by his code. And I used some of his code in the library.
  *  https://github.com/paetztm/recycler_view_headers
  */
 class RecyclerSectionItemDecoration(context: Context,
