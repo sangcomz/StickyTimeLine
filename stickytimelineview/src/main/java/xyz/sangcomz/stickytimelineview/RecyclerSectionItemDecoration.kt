@@ -110,16 +110,17 @@ class RecyclerSectionItemDecoration(context: Context,
                 val topChild = parent.getChildAt(0) ?: return
                 val topChildPosition = parent.getChildAdapterPosition(topChild)
                 headerView?.let {
-                    val sectionInfo = sectionCallback.getSectionHeader(topChildPosition)
-                    previousHeader = sectionInfo
-                    setHeaderView(sectionInfo)
-                    val offset =
-                            if (topChildPosition == 0
-                                    && childInContact.top - (headerOffset * 2) == (-1 * headerOffset)) 0f
-                            else
-                                (childInContact.top - (headerOffset * 2)).toFloat()
+                    sectionCallback.getSectionHeader(topChildPosition)?.let { sectionInfo ->
+                        previousHeader = sectionInfo
+                        setHeaderView(sectionInfo)
+                        val offset =
+                                if (topChildPosition == 0
+                                        && childInContact.top - (headerOffset * 2) == (-1 * headerOffset)) 0f
+                                else
+                                    (childInContact.top - (headerOffset * 2)).toFloat()
 
-                    moveHeader(c, it, offset)
+                        moveHeader(c, it, offset)
+                    }
                 }
             }
         }
@@ -127,15 +128,17 @@ class RecyclerSectionItemDecoration(context: Context,
         for (i in 0 until parent.childCount) {
             val child = parent.getChildAt(i)
             val position = parent.getChildAdapterPosition(child)
-            val sectionInfo = sectionCallback.getSectionHeader(position)
-            setHeaderView(sectionInfo)
-            if (previousHeader != sectionInfo) {
-                headerView?.let {
-                    drawHeader(c, child, it)
-                    previousHeader = sectionInfo
-                }
+            sectionCallback.getSectionHeader(position)?.let { sectionInfo ->
+                setHeaderView(sectionInfo)
+                if (previousHeader != sectionInfo) {
+                    headerView?.let {
+                        drawHeader(c, child, it)
+                        previousHeader = sectionInfo
+                    }
 
+                }
             }
+
         }
     }
 
@@ -245,7 +248,7 @@ class RecyclerSectionItemDecoration(context: Context,
 
         fun isSection(position: Int): Boolean
 
-        fun getSectionHeader(position: Int): SectionInfo
+        fun getSectionHeader(position: Int): SectionInfo?
     }
 }
 

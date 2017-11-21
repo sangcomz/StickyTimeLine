@@ -34,9 +34,8 @@ class MainActivity : AppCompatActivity() {
             override fun isSection(position: Int): Boolean =
                     singerList[position].debuted != singerList[position - 1].debuted
 
-            override fun getSectionHeader(position: Int): SectionInfo
-                    = SectionInfo(singerList[position].debuted,
-                    singerList[position].group)
+            override fun getSectionHeader(position: Int): SectionInfo?
+                    = SectionInfo(singerList[position].debuted, singerList[position].group)
         }
     }
 
