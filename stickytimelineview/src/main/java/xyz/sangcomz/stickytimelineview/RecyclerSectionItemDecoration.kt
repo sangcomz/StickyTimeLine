@@ -74,37 +74,13 @@ class RecyclerSectionItemDecoration(context: Context,
         super.onDrawOver(c,
                 parent,
                 state)
-
+        var previousHeader = SectionInfo("", "")
+        if (headerView == null) getHeaderView(parent)
         drawLine(c, parent)
-
-        if (headerView == null) {
-            headerView = inflateHeaderView(parent)
-            headerView?.let { headerView ->
-                headerTitle = headerView.findViewById(R.id.list_item_section_title)
-                headerSubTitle = headerView.findViewById(R.id.list_item_section_sub_title)
-                val dot: ImageView = headerView.findViewById(R.id.dot)
-                dot.background = getOvalDrawable()
-                recyclerViewAttr?.let { attrs ->
-                    headerTitle?.apply {
-                        setTextColor(attrs.sectionTitleTextColor)
-                        setBackgroundColor(attrs.sectionBackgroundColor)
-                        setTextSize(TypedValue.COMPLEX_UNIT_PX, attrs.sectionTitleTextSize)
-                    }
-                    headerSubTitle?.apply {
-                        setTextColor(attrs.sectionSubTitleTextColor)
-                        setBackgroundColor(attrs.sectionBackgroundColor)
-                        setTextSize(TypedValue.COMPLEX_UNIT_PX, attrs.sectionSubTitleTextSize)
-                    }
-                }
-                fixLayoutSize(headerView, parent)
-            }
-        }
 
         val childInContact = getChildInContact(parent, headerOffset * 2)
         val contractPosition = parent.getChildAdapterPosition(childInContact)
-
-        var previousHeader = SectionInfo("", "")
-
+        
         if (getIsSection(contractPosition)) {
             childInContact?.let {
                 val topChild = parent.getChildAt(0) ?: return
@@ -139,6 +115,29 @@ class RecyclerSectionItemDecoration(context: Context,
                 }
             }
 
+        }
+    }
+
+    private fun getHeaderView(parent: RecyclerView) {
+        headerView = inflateHeaderView(parent)
+        headerView?.let { headerView ->
+            headerTitle = headerView.findViewById(R.id.list_item_section_title)
+            headerSubTitle = headerView.findViewById(R.id.list_item_section_sub_title)
+            val dot: ImageView = headerView.findViewById(R.id.dot)
+            dot.background = getOvalDrawable()
+            recyclerViewAttr?.let { attrs ->
+                headerTitle?.apply {
+                    setTextColor(attrs.sectionTitleTextColor)
+                    setBackgroundColor(attrs.sectionBackgroundColor)
+                    setTextSize(TypedValue.COMPLEX_UNIT_PX, attrs.sectionTitleTextSize)
+                }
+                headerSubTitle?.apply {
+                    setTextColor(attrs.sectionSubTitleTextColor)
+                    setBackgroundColor(attrs.sectionBackgroundColor)
+                    setTextSize(TypedValue.COMPLEX_UNIT_PX, attrs.sectionSubTitleTextSize)
+                }
+            }
+            fixLayoutSize(headerView, parent)
         }
     }
 
