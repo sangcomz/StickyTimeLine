@@ -5,6 +5,8 @@
         <attr name="sectionTitleTextColor" format="color" />
         <attr name="sectionSubTitleTextColor" format="color" />
         <attr name="timeLineColor" format="color" />
+        <attr name="timeLineWidth" format="dimension" />
+
         <attr name="timeLineCircleColor" format="color" />
         <attr name="timeLineCircleStrokeColor" format="color" />
 

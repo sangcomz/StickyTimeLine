@@ -39,17 +39,22 @@ class TimeLineRecyclerView(context: Context?, attrs: AttributeSet?) : RecyclerVi
                                 it.getDimension(R.styleable.TimeLineRecyclerView_sectionTitleTextSize,
                                         context.resources.getDimension(R.dimen.title_text_size)),
                                 it.getDimension(R.styleable.TimeLineRecyclerView_sectionSubTitleTextSize,
-                                        context.resources.getDimension(R.dimen.sub_title_text_size)))
+                                        context.resources.getDimension(R.dimen.sub_title_text_size)),
+                                it.getDimension(R.styleable.TimeLineRecyclerView_timeLineWidth,
+                                        context.resources.getDimension(R.dimen.line_width)))
             }
 
         }
     }
 
     fun addItemDecoration(callback: RecyclerSectionItemDecoration.SectionCallback) {
-        this.addItemDecoration(RecyclerSectionItemDecoration(context,
-                true,
-                callback,
-                recyclerViewAttr))
+        recyclerViewAttr?.let {
+            this.addItemDecoration(RecyclerSectionItemDecoration(context,
+                    true,
+                    callback,
+                    it))
+        }
+
 
     }
 

@@ -10,9 +10,10 @@
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/dot"
         android:layout_width="@dimen/dot_size"
-        android:layout_height="24dp"
-        android:layout_marginRight="@dimen/dot_padding_right"
+        android:layout_height="@dimen/dot_size"
+        android:layout_marginLeft="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/list_item_section_title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

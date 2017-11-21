@@ -2,7 +2,6 @@ package xyz.sangcomz.stickytimelineview
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
@@ -27,7 +26,7 @@ import xyz.sangcomz.stickytimelineview.model.SectionInfo
 class RecyclerSectionItemDecoration(context: Context,
                                     private val sticky: Boolean,
                                     private val sectionCallback: SectionCallback,
-                                    private val recyclerViewAttr: RecyclerViewAttr?) : RecyclerView.ItemDecoration() {
+                                    private val recyclerViewAttr: RecyclerViewAttr) : RecyclerView.ItemDecoration() {
 
     private var headerView: View? = null
     private var headerTitle: TextView? = null
@@ -80,7 +79,6 @@ class RecyclerSectionItemDecoration(context: Context,
 
         val childInContact = getChildInContact(parent, headerOffset * 2)
         val contractPosition = parent.getChildAdapterPosition(childInContact)
-        
         if (getIsSection(contractPosition)) {
             childInContact?.let {
                 val topChild = parent.getChildAt(0) ?: return
@@ -125,7 +123,7 @@ class RecyclerSectionItemDecoration(context: Context,
             headerSubTitle = headerView.findViewById(R.id.list_item_section_sub_title)
             val dot: ImageView = headerView.findViewById(R.id.dot)
             dot.background = getOvalDrawable()
-            recyclerViewAttr?.let { attrs ->
+            recyclerViewAttr.let { attrs ->
                 headerTitle?.apply {
                     setTextColor(attrs.sectionTitleTextColor)
                     setBackgroundColor(attrs.sectionBackgroundColor)
@@ -148,8 +146,8 @@ class RecyclerSectionItemDecoration(context: Context,
 
     private fun drawLine(c: Canvas, parent: RecyclerView) {
         val paint = Paint()
-        paint.color = recyclerViewAttr?.sectionLineColor ?: Color.BLACK
-        paint.strokeWidth = defaultOffset.toFloat()
+        paint.color = recyclerViewAttr.sectionLineColor
+        paint.strokeWidth = recyclerViewAttr.sectionLineWidth
         c.drawLines(floatArrayOf(defaultOffset * 3f, 0f, defaultOffset * 3f, parent.height.toFloat()), paint)
     }
 
@@ -165,8 +163,8 @@ class RecyclerSectionItemDecoration(context: Context,
     private fun getOvalDrawable(): Drawable {
         val strokeWidth = defaultOffset / 2
         val roundRadius = defaultOffset * 2
-        val strokeColor = recyclerViewAttr?.sectionStrokeColor ?: Color.WHITE
-        val fillColor = recyclerViewAttr?.sectionCircleColor ?: Color.BLACK
+        val strokeColor = recyclerViewAttr.sectionStrokeColor
+        val fillColor = recyclerViewAttr.sectionCircleColor
 
         val gd = GradientDrawable()
         gd.setColor(fillColor)

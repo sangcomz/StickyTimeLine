@@ -10,4 +10,6 @@ data class RecyclerViewAttr(val sectionBackgroundColor: Int,
                             val sectionCircleColor: Int,
                             val sectionStrokeColor: Int,
                             val sectionTitleTextSize: Float,
-                            val sectionSubTitleTextSize: Float)
+                            val sectionSubTitleTextSize: Float,
+                            val sectionLineWidth: Float
+                            )
