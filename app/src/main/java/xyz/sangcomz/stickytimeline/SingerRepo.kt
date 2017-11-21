@@ -29,7 +29,6 @@ class SingerRepo {
             singerList.add(Singer("Buzz", "2003.10", "Min Kyung Hoon"))
 
             singerList.add(Singer("Solo", "2006.06", "Yunha"))
-            singerList.add(Singer("Solo", "2017.11", "Woo Won Jae"))
 
             singerList.add(Singer("Girls' Generation", "2007.08", "TaeYeon"))
             singerList.add(Singer("Girls' Generation", "2007.08", "Sunny"))
@@ -51,6 +50,9 @@ class SingerRepo {
             singerList.add(Singer("Wanna One", "2017.08", "Bae Jin Young"))
             singerList.add(Singer("Wanna One", "2017.08", "Hwang Min Hyun"))
             singerList.add(Singer("Wanna One", "2017.08", "Park Ji Hoon"))
+
+            singerList.add(Singer("Solo", "2017.11", "Woo Won Jae"))
+
             return singerList
         }
 }

@@ -102,6 +102,7 @@ class RecyclerSectionItemDecoration(context: Context,
 
         val childInContact = getChildInContact(parent, headerOffset * 2)
         val contractPosition = parent.getChildAdapterPosition(childInContact)
+
         var previousHeader = SectionInfo("", "")
 
         if (getIsSection(contractPosition)) {
@@ -113,8 +114,11 @@ class RecyclerSectionItemDecoration(context: Context,
                     previousHeader = sectionInfo
                     setHeaderView(sectionInfo)
                     val offset =
-                            if (topChildPosition == 0) 0f
-                            else (childInContact.top - (headerOffset * 2)).toFloat()
+                            if (topChildPosition == 0
+                                    && childInContact.top - (headerOffset * 2) == (-1 * headerOffset)) 0f
+                            else
+                                (childInContact.top - (headerOffset * 2)).toFloat()
+
                     moveHeader(c, it, offset)
                 }
             }
