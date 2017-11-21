@@ -141,7 +141,13 @@ class RecyclerSectionItemDecoration(context: Context,
 
     private fun setHeaderView(sectionInfo: SectionInfo) {
         headerTitle?.text = sectionInfo.title
-        headerSubTitle?.text = sectionInfo.subTitle
+        sectionInfo.subTitle?.let {
+            headerSubTitle?.visibility = View.VISIBLE
+            headerSubTitle?.text = it
+        } ?: kotlin.run {
+            headerSubTitle?.visibility = View.GONE
+        }
+
     }
 
     private fun drawLine(c: Canvas, parent: RecyclerView) {
