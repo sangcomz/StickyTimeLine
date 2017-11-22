@@ -29,10 +29,11 @@ class RecyclerSectionItemDecoration(context: Context,
                                     private val recyclerViewAttr: RecyclerViewAttr) : RecyclerView.ItemDecoration() {
 
     private var headerView: View? = null
+    private var headerBackground: View? = null
     private var headerTitle: TextView? = null
     private var headerSubTitle: TextView? = null
     private var defaultOffset: Int = 8.DP(context).toInt()
-    private var headerOffset = defaultOffset * 8
+    private var headerOffset = defaultOffset * 7
 
 
     override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State?) {
@@ -119,19 +120,22 @@ class RecyclerSectionItemDecoration(context: Context,
     private fun getHeaderView(parent: RecyclerView) {
         headerView = inflateHeaderView(parent)
         headerView?.let { headerView ->
+            headerBackground = headerView.findViewById(R.id.v_item_background)
             headerTitle = headerView.findViewById(R.id.list_item_section_title)
             headerSubTitle = headerView.findViewById(R.id.list_item_section_sub_title)
             val dot: ImageView = headerView.findViewById(R.id.dot)
             dot.background = getOvalDrawable()
             recyclerViewAttr.let { attrs ->
+                headerBackground?.apply {
+                    setBackgroundColor(attrs.sectionBackgroundColor)
+
+                }
                 headerTitle?.apply {
                     setTextColor(attrs.sectionTitleTextColor)
-                    setBackgroundColor(attrs.sectionBackgroundColor)
                     setTextSize(TypedValue.COMPLEX_UNIT_PX, attrs.sectionTitleTextSize)
                 }
                 headerSubTitle?.apply {
                     setTextColor(attrs.sectionSubTitleTextColor)
-                    setBackgroundColor(attrs.sectionBackgroundColor)
                     setTextSize(TypedValue.COMPLEX_UNIT_PX, attrs.sectionSubTitleTextSize)
                 }
             }
@@ -141,11 +145,13 @@ class RecyclerSectionItemDecoration(context: Context,
 
     private fun setHeaderView(sectionInfo: SectionInfo) {
         headerTitle?.text = sectionInfo.title
-        sectionInfo.subTitle?.let {
-            headerSubTitle?.visibility = View.VISIBLE
-            headerSubTitle?.text = it
-        } ?: kotlin.run {
-            headerSubTitle?.visibility = View.GONE
+        headerSubTitle?.apply {
+            sectionInfo.subTitle?.let {
+                visibility = View.VISIBLE
+                text = it
+            } ?: kotlin.run {
+                visibility = View.GONE
+            }
         }
 
     }
