@@ -1,6 +1,6 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="recycler_section_header_height">56dp</dimen>
+    <dimen name="recycler_section_header_height">64dp</dimen>
     <dimen name="header_padding_left">12dp</dimen>
     <dimen name="dot_padding_right">12dp</dimen>
     <dimen name="header_textview_padding">8dp</dimen>
