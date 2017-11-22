@@ -33,7 +33,7 @@ class RecyclerSectionItemDecoration(context: Context,
     private var headerTitle: TextView? = null
     private var headerSubTitle: TextView? = null
     private var defaultOffset: Int = 8.DP(context).toInt()
-    private var headerOffset = defaultOffset * 7
+    private var headerOffset = defaultOffset * 8
 
 
     override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State?) {
@@ -54,7 +54,7 @@ class RecyclerSectionItemDecoration(context: Context,
         super.onDraw(c, parent, state)
         c?.let {
             parent?.let {
-                val leftMargin = defaultOffset * 7
+                val leftMargin = defaultOffset * 6
                 val rightMargin = defaultOffset * 2
                 val topMargin = defaultOffset
                 (0 until parent.childCount)
@@ -131,10 +131,12 @@ class RecyclerSectionItemDecoration(context: Context,
 
                 }
                 headerTitle?.apply {
+                    setPadding(defaultOffset / 2, 0, defaultOffset / 2, 0)
                     setTextColor(attrs.sectionTitleTextColor)
                     setTextSize(TypedValue.COMPLEX_UNIT_PX, attrs.sectionTitleTextSize)
                 }
                 headerSubTitle?.apply {
+                    setPadding(defaultOffset / 2, 0, defaultOffset / 2, 0)
                     setTextColor(attrs.sectionSubTitleTextColor)
                     setTextSize(TypedValue.COMPLEX_UNIT_PX, attrs.sectionSubTitleTextSize)
                 }
