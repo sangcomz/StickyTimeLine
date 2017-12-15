@@ -3,8 +3,8 @@
 buildscript {
 
     ext {
-        support_version = '27.0.1'
-        kotlin_version = '1.1.60'
+        support_version = '27.0.2'
+        kotlin_version = '1.2.0'
         constraint_version = '1.0.2'
     }
 

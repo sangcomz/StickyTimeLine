@@ -44,30 +44,39 @@ class RecyclerSectionItemDecoration(context: Context,
 
         val pos = parent.getChildAdapterPosition(view)
 
-        if (getIsSection(pos)) {
-            outRect.top = headerOffset
+        if (getIsSection(pos)) outRect.top = headerOffset
+        else {
+            outRect.top = defaultOffset / 2
         }
-    }
 
+
+        val leftMargin = defaultOffset * 6
+        val rightMargin = defaultOffset * 2
+
+        outRect.bottom = defaultOffset / 2
+        outRect.left = leftMargin
+        outRect.right = rightMargin
+
+    }
 
     override fun onDraw(c: Canvas?, parent: RecyclerView?, state: RecyclerView.State?) {
         super.onDraw(c, parent, state)
-        c?.let {
-            parent?.let {
-                val leftMargin = defaultOffset * 6
-                val rightMargin = defaultOffset * 2
-                val topMargin = defaultOffset
-                (0 until parent.childCount)
-                        .map { parent.getChildAt(it) }
-                        .forEach {
-                            val params = it.layoutParams
-                            if (params is RecyclerView.LayoutParams && params.leftMargin != leftMargin) {
-                                params.setMargins(leftMargin, 0, rightMargin, topMargin)
-                                it.layoutParams = params
-                            }
-                        }
-            }
-        }
+//        c?.let {
+//            parent?.let {
+//                val leftMargin = defaultOffset * 6
+//                val rightMargin = defaultOffset * 2
+//                val topMargin = defaultOffset
+//                (0 until parent.childCount)
+//                        .map { parent.getChildAt(it) }
+//                        .forEach {
+//                            val params = it.layoutParams
+//                            if (params is RecyclerView.LayoutParams && params.leftMargin != leftMargin) {
+//                                params.setMargins(leftMargin, 0, rightMargin, topMargin)
+//                                it.layoutParams = params
+//                            }
+//                        }
+//            }
+//        }
     }
 
     override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State?) {
@@ -80,6 +89,7 @@ class RecyclerSectionItemDecoration(context: Context,
 
         val childInContact = getChildInContact(parent, headerOffset * 2)
         val contractPosition = parent.getChildAdapterPosition(childInContact)
+
         if (getIsSection(contractPosition)) {
             childInContact?.let {
                 val topChild = parent.getChildAt(0) ?: return
@@ -113,7 +123,6 @@ class RecyclerSectionItemDecoration(context: Context,
 
                 }
             }
-
         }
     }
 

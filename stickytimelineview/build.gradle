@@ -4,6 +4,11 @@ apply plugin: 'com.github.dcendents.android-maven'
 
 group='com.github.sangcomz'
 
+repositories {
+    mavenCentral()
+}
+
+
 android {
     compileSdkVersion gradle.compileSdk
     buildToolsVersion gradle.buildTools
@@ -34,7 +39,4 @@ dependencies {
     implementation "com.android.support:recyclerview-v7:$support_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     implementation "com.android.support.constraint:constraint-layout:$constraint_version"
-}
-repositories {
-    mavenCentral()
 }
