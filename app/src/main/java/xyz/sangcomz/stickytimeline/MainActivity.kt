@@ -34,9 +34,10 @@ class MainActivity : AppCompatActivity() {
             //In your data, implement a method to determine if this is a section.
             override fun isSection(position: Int): Boolean =
                     singerList[position].debuted != singerList[position - 1].debuted
+
             //Implement a method that returns a SectionHeader.
-            override fun getSectionHeader(position: Int): SectionInfo?
-                    = SectionInfo(singerList[position].debuted, singerList[position].group)
+            override fun getSectionHeader(position: Int): SectionInfo? =
+                    SectionInfo(singerList[position].debuted, singerList[position].group)
         }
     }
 

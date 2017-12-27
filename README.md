@@ -43,15 +43,15 @@ StickyTimeLine is timeline view for android.
         recyclerView.addItemDecoration(getSectionCallback(singerList))
         
         
-        private fun getSectionCallback(singerList: List<Singer>):
-         RecyclerSectionItemDecoration.SectionCallback {
+        private fun getSectionCallback(singerList: List<Singer>): RecyclerSectionItemDecoration.SectionCallback {
             return object : RecyclerSectionItemDecoration.SectionCallback {
                 //In your data, implement a method to determine if this is a section.
                 override fun isSection(position: Int): Boolean =
                         singerList[position].debuted != singerList[position - 1].debuted
+    
                 //Implement a method that returns a SectionHeader.
-                override fun getSectionHeader(position: Int): SectionInfo?
-                        = SectionInfo(singerList[position].debuted, singerList[position].group)
+                override fun getSectionHeader(position: Int): SectionInfo? =
+                        SectionInfo(singerList[position].debuted, singerList[position].group)
             }
         }
 ```
