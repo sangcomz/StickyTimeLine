@@ -4,9 +4,9 @@
 
 StickyTimeLine is timeline view for android.
 
-##How to Use
+## How to Use
 
-###Gradle
+### Gradle
 ```
     repositories {
         maven { url 'https://jitpack.io' }
@@ -16,8 +16,8 @@ StickyTimeLine is timeline view for android.
         compile 'com.github.sangcomz:StickyTimeLine:v0.0.12'
     }
 ```
-###Usage
-####activity_main.xml
+### Usage
+#### activity_main.xml
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -33,7 +33,7 @@ StickyTimeLine is timeline view for android.
         android:layout_height="wrap_content" />
 </android.support.constraint.ConstraintLayout>
 ```
-####MainActivity.kt
+#### MainActivity.kt
 ```
         val recyclerView: TimeLineRecyclerView = findViewById(R.id.recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(this,
@@ -42,10 +42,10 @@ StickyTimeLine is timeline view for android.
 
         recyclerView.addItemDecoration(getSectionCallback(singerList))
 ```
-#####caution
+##### caution
 - *Currently only LinearLayoutManager is supported.*
 
-####recycler_row.xml
+#### recycler_row.xml
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <!--Don't set margin value in the parent view-->
@@ -63,24 +63,24 @@ StickyTimeLine is timeline view for android.
 </android.support.v7.widget.CardView>
 ```
 
-#####caution
+##### caution
 - *Don't set margin value in the parent view.*
 
 
-##Result Screen
+## Result Screen
 
 | Project Name | Result Screen   |
 |-------|---|
 | Sample |  <img src="/pic/sample_result.gif"> |
 | AlleysMap | <img src="/pic/alleys_result.gif">  |
 
-#Contribute
+# Contribute
 We welcome any contributions.
 
 # Inspired by
  * [tim.paetz](https://github.com/paetztm), I was inspired by his code. And I used some of his code in the library.
 
-#License
+# License
 
     Copyright 2018 Jeong Seok-Won
 
