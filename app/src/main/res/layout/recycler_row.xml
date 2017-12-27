@@ -9,6 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
-        tools:text="asdf" />
+        tools:text="name" />
 
 </android.support.v7.widget.CardView>
