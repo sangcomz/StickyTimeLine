@@ -103,6 +103,19 @@ class MainActivity : AppCompatActivity() {
 ##### caution
 - *Don't set margin value in the parent view.*
 
+#### attribute
+
+|        Method Name       | Description                                | Default Value |
+|:------------------------:|--------------------------------------------|:-------------:|
+|  sectionBackgroundColor  | To change section section background color |    #f9f9f9    |
+|   sectionTitleTextColor  | To change section title color              |    #414fca    |
+| sectionSubTitleTextColor | To change section sub title color          |    #d16767    |
+|     sectionLineColor     | To change line color in timeline           |    #51ae45    |
+|    sectionCircleColor    | To change circle color in timeline         |    #51ae45    |
+|    sectionStrokeColor    | To change circle stroke color in timeline  |    #f9f9f9    |
+|   sectionTitleTextSize   | To change section title text size          |      14sp     |
+|  sectionSubTitleTextSize | To change section sub title text size      |      12sp     |
+|     sectionLineWidth     | To change line width in timeline           |      4dp      |
 
 ## Result Screen
 
