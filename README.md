@@ -107,8 +107,8 @@ class MainActivity : AppCompatActivity() {
 ## Result Screen
 
 | Project Name | Result Screen   |
-|-------|---|
-| Sample |  <img src="/pic/sample_result.gif"> |
+|:---------:|---|
+| Sample    |  <img src="/pic/sample_result.gif"> |
 | AlleysMap | <img src="/pic/alleys_result.gif">  |
 
 # Contribute
