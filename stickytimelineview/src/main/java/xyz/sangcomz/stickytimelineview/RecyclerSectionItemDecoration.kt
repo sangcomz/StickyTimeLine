@@ -17,8 +17,12 @@ import xyz.sangcomz.stickytimelineview.ext.DP
 import xyz.sangcomz.stickytimelineview.model.RecyclerViewAttr
 import xyz.sangcomz.stickytimelineview.model.SectionInfo
 
+/*
+ */
 
 /**
+ * Copyright 2017 Timothy Paetz
+ * Copyright 2017 SeokWon Jeong
  *  thanks to @tim.paetz
  *  I was inspired by his code. And I used some of his code in the library.
  *  https://github.com/paetztm/recycler_view_headers
@@ -36,6 +40,10 @@ class RecyclerSectionItemDecoration(context: Context,
     private var headerOffset = defaultOffset * 8
 
 
+    /**
+     * Get the offset for each Item.
+     * There is a difference in top offset between sections and not sections.
+     */
     override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State?) {
         super.getItemOffsets(outRect,
                 view,
@@ -49,7 +57,6 @@ class RecyclerSectionItemDecoration(context: Context,
             outRect.top = defaultOffset / 2
         }
 
-
         val leftMargin = defaultOffset * 6
         val rightMargin = defaultOffset * 2
 
@@ -59,26 +66,15 @@ class RecyclerSectionItemDecoration(context: Context,
 
     }
 
-    override fun onDraw(c: Canvas?, parent: RecyclerView?, state: RecyclerView.State?) {
-        super.onDraw(c, parent, state)
-//        c?.let {
-//            parent?.let {
-//                val leftMargin = defaultOffset * 6
-//                val rightMargin = defaultOffset * 2
-//                val topMargin = defaultOffset
-//                (0 until parent.childCount)
-//                        .map { parent.getChildAt(it) }
-//                        .forEach {
-//                            val params = it.layoutParams
-//                            if (params is RecyclerView.LayoutParams && params.leftMargin != leftMargin) {
-//                                params.setMargins(leftMargin, 0, rightMargin, topMargin)
-//                                it.layoutParams = params
-//                            }
-//                        }
-//            }
-//        }
-    }
-
+    /**
+     * Draw any appropriate decorations into the Canvas supplied to the RecyclerView.
+     * Any content drawn by this method will be drawn after the item views are drawn
+     * and will thus appear over the views.
+     *
+     * @param c Canvas to draw into
+     * @param parent RecyclerView this ItemDecoration is drawing into
+     * @param state The current state of RecyclerView.
+     */
     override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State?) {
         super.onDrawOver(c,
                 parent,
@@ -126,6 +122,9 @@ class RecyclerSectionItemDecoration(context: Context,
         }
     }
 
+    /**
+     * First create a header view.
+     */
     private fun getHeaderView(parent: RecyclerView) {
         headerView = inflateHeaderView(parent)
         headerView?.let { headerView ->
@@ -154,6 +153,9 @@ class RecyclerSectionItemDecoration(context: Context,
         }
     }
 
+    /**
+     * Set a header view for section info.
+     */
     private fun setHeaderView(sectionInfo: SectionInfo) {
         headerTitle?.text = sectionInfo.title
         headerSubTitle?.apply {
@@ -167,6 +169,9 @@ class RecyclerSectionItemDecoration(context: Context,
 
     }
 
+    /**
+     * Draw a line in the timeline.
+     */
     private fun drawLine(c: Canvas, parent: RecyclerView) {
         val paint = Paint()
         paint.color = recyclerViewAttr.sectionLineColor
@@ -174,6 +179,9 @@ class RecyclerSectionItemDecoration(context: Context,
         c.drawLines(floatArrayOf(defaultOffset * 3f, 0f, defaultOffset * 3f, parent.height.toFloat()), paint)
     }
 
+    /**
+     *
+     */
     private fun getChildInContact(parent: RecyclerView, contactPoint: Int): View? =
             (0 until parent.childCount)
                     .map {
@@ -183,6 +191,9 @@ class RecyclerSectionItemDecoration(context: Context,
                         it.top in contactPoint / 2..contactPoint
                     }
 
+    /**
+     * Returns the oval drawable of the timeline.
+     */
     private fun getOvalDrawable(): Drawable {
         val strokeWidth = defaultOffset / 2
         val roundRadius = defaultOffset * 2
@@ -197,6 +208,9 @@ class RecyclerSectionItemDecoration(context: Context,
         return gd
     }
 
+    /**
+     * Moving parts when headers meet
+     */
     private fun moveHeader(c: Canvas, topHeader: View, offset: Float) {
         c.save()
         c.translate(0f, offset)
@@ -204,6 +218,9 @@ class RecyclerSectionItemDecoration(context: Context,
         c.restore()
     }
 
+    /**
+     * Draw a header
+     */
     private fun drawHeader(c: Canvas, child: View, headerView: View) {
         c.save()
         if (sticky) {
@@ -251,6 +268,9 @@ class RecyclerSectionItemDecoration(context: Context,
                 view.measuredHeight)
     }
 
+    /**
+     * To check if section is
+     */
     private fun getIsSection(position: Int): Boolean = when (position) {
         0 -> {
             true
@@ -264,10 +284,20 @@ class RecyclerSectionItemDecoration(context: Context,
 
     }
 
+
+    /**
+     * Section-specific callback interface
+     */
     interface SectionCallback {
 
+        /**
+         * To check if section is
+         */
         fun isSection(position: Int): Boolean
 
+        /**
+         * Functions that return a section header in a section
+         */
         fun getSectionHeader(position: Int): SectionInfo?
     }
 }
