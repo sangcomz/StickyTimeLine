@@ -16,13 +16,15 @@ android {
     }
 
     signingConfigs {
-        Properties signProp = new Properties()
-        signProp.load(project.rootProject.file('release/sign.properties').newDataInputStream())
-        config {
-            keyAlias signProp.get("alias") ? signProp.get("alias") : ""
-            keyPassword signProp.get("alias_password") ? signProp.get("alias_password") : ""
-            storeFile rootProject.file("release/key.jks")
-            storePassword signProp.get("password") ? signProp.get("password") : ""
+        if (project.rootProject.file('release/sign.properties').exists()) {
+            Properties signProp = new Properties()
+            signProp.load(project.rootProject.file('release/sign.properties').newDataInputStream())
+            config {
+                keyAlias signProp.get("alias") ? signProp.get("alias") : ""
+                keyPassword signProp.get("alias_password") ? signProp.get("alias_password") : ""
+                storeFile rootProject.file("release/key.jks")
+                storePassword signProp.get("password") ? signProp.get("password") : ""
+            }
         }
     }
 
@@ -30,7 +32,12 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.config
+            if (project.rootProject.file('release/sign.properties').exists()) {
+                signingConfig signingConfigs.config
+            }
+        }
+        debug {
+
         }
     }
 }
@@ -47,3 +54,4 @@ dependencies {
     implementation "com.android.support:cardview-v7:$support_version"
     implementation project(':stickytimelineview')
 }
+
