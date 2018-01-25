@@ -4,7 +4,7 @@ buildscript {
 
     ext {
         support_version = '27.0.2'
-        kotlin_version = '1.2.0'
+        kotlin_version = '1.2.20'
         constraint_version = '1.0.2'
     }
 
