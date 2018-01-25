@@ -4,7 +4,7 @@
 
 StickyTimeLine is timeline view for android.
 
-## What's New in 0.0.14?
+## What's New in 0.0.15?
 - Fix Problems when recycler view is not added to dependency [#5](https://github.com/sangcomz/StickyTimeLine/issues/5)
 
 ## How to Use
@@ -16,7 +16,7 @@ StickyTimeLine is timeline view for android.
     }
 
     dependencies {
-        compile 'com.github.sangcomz:StickyTimeLine:v0.0.14'
+        compile 'com.github.sangcomz:StickyTimeLine:v0.0.15'
     }
 ```
 ### Usage
