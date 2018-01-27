@@ -28,7 +28,6 @@ import xyz.sangcomz.stickytimelineview.model.SectionInfo
  *  https://github.com/paetztm/recycler_view_headers
  */
 class RecyclerSectionItemDecoration(context: Context,
-                                    private val sticky: Boolean,
                                     private val sectionCallback: SectionCallback,
                                     private val recyclerViewAttr: RecyclerViewAttr) : RecyclerView.ItemDecoration() {
 
@@ -212,6 +211,7 @@ class RecyclerSectionItemDecoration(context: Context,
      * Moving parts when headers meet
      */
     private fun moveHeader(c: Canvas, topHeader: View, offset: Float) {
+        if (!recyclerViewAttr.isSticky) return
         c.save()
         c.translate(0f, offset)
         topHeader.draw(c)
@@ -223,7 +223,7 @@ class RecyclerSectionItemDecoration(context: Context,
      */
     private fun drawHeader(c: Canvas, child: View, headerView: View) {
         c.save()
-        if (sticky) {
+        if (recyclerViewAttr.isSticky) {
             c.translate(0f,
                     Math.max(0,
                             child.top - headerView.height).toFloat())

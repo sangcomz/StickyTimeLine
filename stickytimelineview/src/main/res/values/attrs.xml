@@ -12,5 +12,6 @@
 
         <attr name="sectionTitleTextSize" format="dimension" />
         <attr name="sectionSubTitleTextSize" format="dimension" />
+        <attr name="isSticky" format="boolean" />
     </declare-styleable>
 </resources>
