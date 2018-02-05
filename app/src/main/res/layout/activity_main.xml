@@ -9,5 +9,6 @@
     <xyz.sangcomz.stickytimelineview.TimeLineRecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        app:isSticky="true" />
 </android.support.constraint.ConstraintLayout>
