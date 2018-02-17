@@ -124,7 +124,6 @@ class RecyclerSectionItemDecoration(
                 setHeaderView(sectionInfo)
                 if (previousHeader != sectionInfo) {
                     headerView?.let {
-                        println("section header i :::: $i, ${sectionInfo.title}")
                         drawHeader(c, child, it)
                         previousHeader = sectionInfo
                     }
