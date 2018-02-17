@@ -4,8 +4,8 @@
 
 StickyTimeLine is timeline view for android.
 
-## What's New in 0.0.16?
-- Fix Problems when recycler view is not added to dependency [#5](https://github.com/sangcomz/StickyTimeLine/issues/5)
+## What's New in 0.0.17? :tada:
+- New Feature isSticky
 
 ## How to Use
 
@@ -16,7 +16,7 @@ StickyTimeLine is timeline view for android.
     }
 
     dependencies {
-        compile 'com.github.sangcomz:StickyTimeLine:v0.0.16'
+        compile 'com.github.sangcomz:StickyTimeLine:v0.0.17'
     }
 ```
 ### Usage
@@ -108,17 +108,18 @@ class MainActivity : AppCompatActivity() {
 
 #### attribute
 
-|        Method Name       | Description                                | Default Value |
-|:------------------------:|--------------------------------------------|:-------------:|
-|  sectionBackgroundColor  | To change section section background color |    #f9f9f9    |
-|   sectionTitleTextColor  | To change section title color              |    #414fca    |
-| sectionSubTitleTextColor | To change section sub title color          |    #d16767    |
-|     sectionLineColor     | To change line color in timeline           |    #51ae45    |
-|    sectionCircleColor    | To change circle color in timeline         |    #51ae45    |
-|    sectionStrokeColor    | To change circle stroke color in timeline  |    #f9f9f9    |
-|   sectionTitleTextSize   | To change section title text size          |      14sp     |
-|  sectionSubTitleTextSize | To change section sub title text size      |      12sp     |
-|     sectionLineWidth     | To change line width in timeline           |      4dp      |
+|        Method Name       | Description                                    | Default Value |
+|:------------------------:|------------------------------------------------|:-------------:|
+|  sectionBackgroundColor  | To change section section background color     |    #f9f9f9    |
+|   sectionTitleTextColor  | To change section title color                  |    #414fca    |
+| sectionSubTitleTextColor | To change section sub title color              |    #d16767    |
+|     sectionLineColor     | To change line color in timeline               |    #51ae45    |
+|    sectionCircleColor    | To change circle color in timeline             |    #51ae45    |
+|    sectionStrokeColor    | To change circle stroke color in timeline      |    #f9f9f9    |
+|   sectionTitleTextSize   | To change section title text size              |      14sp     |
+|  sectionSubTitleTextSize | To change section sub title text size          |      12sp     |
+|     sectionLineWidth     | To change line width in timeline               |      4dp      |
+|     :new: isSticky       | To change Sticky functionality in the Timeline |      true     |
 
 ## Result Screen
 
