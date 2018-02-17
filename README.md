@@ -4,7 +4,7 @@
 
 StickyTimeLine is timeline view for android.
 
-## What's New in 0.0.17:tada:?
+## What's New in 0.0.17? :tada:
 - New Feature isSticky
 
 ## How to Use
@@ -119,7 +119,7 @@ class MainActivity : AppCompatActivity() {
 |   sectionTitleTextSize   | To change section title text size              |      14sp     |
 |  sectionSubTitleTextSize | To change section sub title text size          |      12sp     |
 |     sectionLineWidth     | To change line width in timeline               |      4dp      |
-|      :new:isSticky       | To change Sticky functionality in the Timeline |      true     |
+|     :new: isSticky       | To change Sticky functionality in the Timeline |      true     |
 
 ## Result Screen
 
