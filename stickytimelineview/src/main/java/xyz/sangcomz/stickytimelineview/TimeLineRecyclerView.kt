@@ -23,7 +23,7 @@ import xyz.sangcomz.stickytimelineview.model.RecyclerViewAttr
  * limitations under the License.
  */
 
-class TimeLineRecyclerView(context: Context?, attrs: AttributeSet?) : RecyclerView(context, attrs) {
+class TimeLineRecyclerView(context: Context, attrs: AttributeSet?) : RecyclerView(context, attrs) {
 
     private var recyclerViewAttr: RecyclerViewAttr? = null
 

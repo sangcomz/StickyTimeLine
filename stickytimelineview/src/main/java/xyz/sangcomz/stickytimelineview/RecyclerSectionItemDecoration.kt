@@ -28,9 +28,9 @@ import xyz.sangcomz.stickytimelineview.model.SectionInfo
  *  https://github.com/paetztm/recycler_view_headers
  */
 class RecyclerSectionItemDecoration(
-    context: Context,
-    private val sectionCallback: SectionCallback,
-    private val recyclerViewAttr: RecyclerViewAttr
+        context: Context,
+        private val sectionCallback: SectionCallback,
+        private val recyclerViewAttr: RecyclerViewAttr
 ) : RecyclerView.ItemDecoration() {
 
     private var headerView: View? = null
@@ -46,16 +46,16 @@ class RecyclerSectionItemDecoration(
      * There is a difference in top offset between sections and not sections.
      */
     override fun getItemOffsets(
-        outRect: Rect,
-        view: View,
-        parent: RecyclerView,
-        state: RecyclerView.State?
+            outRect: Rect,
+            view: View,
+            parent: RecyclerView,
+            state: RecyclerView.State
     ) {
         super.getItemOffsets(
-            outRect,
-            view,
-            parent,
-            state
+                outRect,
+                view,
+                parent,
+                state
         )
 
         val pos = parent.getChildAdapterPosition(view)
@@ -83,21 +83,22 @@ class RecyclerSectionItemDecoration(
      * @param parent RecyclerView this ItemDecoration is drawing into
      * @param state The current state of RecyclerView.
      */
-    override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State?) {
+    override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         super.onDrawOver(
-            c,
-            parent,
-            state
+                c,
+                parent,
+                state
         )
         var previousHeader = SectionInfo("", "")
         if (headerView == null) getHeaderView(parent)
         drawLine(c, parent)
 
         val childInContact = getChildInContact(parent, headerOffset * 2)
-        val contractPosition = parent.getChildAdapterPosition(childInContact)
 
-        if (getIsSection(contractPosition) && recyclerViewAttr.isSticky) {
-            childInContact?.let {
+
+        childInContact?.let {
+            val contractPosition = parent.getChildAdapterPosition(childInContact)
+            if (getIsSection(contractPosition) && recyclerViewAttr.isSticky) {
                 val topChild = parent.getChildAt(0) ?: return
                 val topChildPosition = parent.getChildAdapterPosition(topChild)
                 headerView?.let {
@@ -105,10 +106,10 @@ class RecyclerSectionItemDecoration(
                         previousHeader = sectionInfo
                         setHeaderView(sectionInfo)
                         val offset =
-                            if (topChildPosition == 0
-                                && childInContact.top - (headerOffset * 2) == (-1 * headerOffset)) 0f
-                            else
-                                (childInContact.top - (headerOffset * 2)).toFloat()
+                                if (topChildPosition == 0
+                                        && childInContact.top - (headerOffset * 2) == (-1 * headerOffset)) 0f
+                                else
+                                    (childInContact.top - (headerOffset * 2)).toFloat()
 
                         moveHeader(c, it, offset)
                     }
@@ -187,12 +188,12 @@ class RecyclerSectionItemDecoration(
         paint.color = recyclerViewAttr.sectionLineColor
         paint.strokeWidth = recyclerViewAttr.sectionLineWidth
         c.drawLines(
-            floatArrayOf(
-                defaultOffset * 3f,
-                0f,
-                defaultOffset * 3f,
-                parent.height.toFloat()
-            ), paint
+                floatArrayOf(
+                        defaultOffset * 3f,
+                        0f,
+                        defaultOffset * 3f,
+                        parent.height.toFloat()
+                ), paint
         )
     }
 
@@ -200,13 +201,13 @@ class RecyclerSectionItemDecoration(
      *
      */
     private fun getChildInContact(parent: RecyclerView, contactPoint: Int): View? =
-        (0 until parent.childCount)
-            .map {
-                parent.getChildAt(it)
-            }
-            .firstOrNull {
-                it.top in contactPoint / 2..contactPoint
-            }
+            (0 until parent.childCount)
+                    .map {
+                        parent.getChildAt(it)
+                    }
+                    .firstOrNull {
+                        it.top in contactPoint / 2..contactPoint
+                    }
 
     /**
      * Returns the oval drawable of the timeline.
@@ -243,16 +244,16 @@ class RecyclerSectionItemDecoration(
         c.save()
         if (recyclerViewAttr.isSticky) {
             c.translate(
-                0f,
-                Math.max(
-                    0,
-                    child.top - headerView.height
-                ).toFloat()
+                    0f,
+                    Math.max(
+                            0,
+                            child.top - headerView.height
+                    ).toFloat()
             )
         } else {
             c.translate(
-                0f,
-                (child.top - headerView.height).toFloat()
+                    0f,
+                    (child.top - headerView.height).toFloat()
             )
         }
         headerView.draw(c)
@@ -261,11 +262,11 @@ class RecyclerSectionItemDecoration(
 
     private fun inflateHeaderView(parent: RecyclerView): View {
         return LayoutInflater.from(parent.context)
-            .inflate(
-                R.layout.recycler_section_header,
-                parent,
-                false
-            )
+                .inflate(
+                        R.layout.recycler_section_header,
+                        parent,
+                        false
+                )
     }
 
     /**
@@ -274,35 +275,35 @@ class RecyclerSectionItemDecoration(
      */
     private fun fixLayoutSize(view: View, parent: ViewGroup) {
         val widthSpec = View.MeasureSpec.makeMeasureSpec(
-            parent.width,
-            View.MeasureSpec.EXACTLY
+                parent.width,
+                View.MeasureSpec.EXACTLY
         )
         val heightSpec = View.MeasureSpec.makeMeasureSpec(
-            parent.height,
-            View.MeasureSpec.UNSPECIFIED
+                parent.height,
+                View.MeasureSpec.UNSPECIFIED
         )
 
         val childWidth = ViewGroup.getChildMeasureSpec(
-            widthSpec,
-            parent.paddingLeft + parent.paddingRight,
-            view.layoutParams.width
+                widthSpec,
+                parent.paddingLeft + parent.paddingRight,
+                view.layoutParams.width
         )
         val childHeight = ViewGroup.getChildMeasureSpec(
-            heightSpec,
-            parent.paddingTop + parent.paddingBottom,
-            view.layoutParams.height
+                heightSpec,
+                parent.paddingTop + parent.paddingBottom,
+                view.layoutParams.height
         )
 
         view.measure(
-            childWidth,
-            childHeight
+                childWidth,
+                childHeight
         )
 
         view.layout(
-            0,
-            0,
-            view.measuredWidth,
-            view.measuredHeight
+                0,
+                0,
+                view.measuredWidth,
+                view.measuredHeight
         )
     }
 
