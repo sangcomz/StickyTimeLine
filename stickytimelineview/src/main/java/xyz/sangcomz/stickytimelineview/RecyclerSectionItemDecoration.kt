@@ -93,11 +93,12 @@ class RecyclerSectionItemDecoration(
         if (headerView == null) getHeaderView(parent)
         drawLine(c, parent)
 
-        val childInContact = getChildInContact(parent, headerOffset * 2) ?: return
-        val contractPosition = parent.getChildAdapterPosition(childInContact)
+        val childInContact = getChildInContact(parent, headerOffset * 2)
 
-        if (getIsSection(contractPosition) && recyclerViewAttr.isSticky) {
-            childInContact?.let {
+
+        childInContact?.let {
+            val contractPosition = parent.getChildAdapterPosition(childInContact)
+            if (getIsSection(contractPosition) && recyclerViewAttr.isSticky) {
                 val topChild = parent.getChildAt(0) ?: return
                 val topChildPosition = parent.getChildAdapterPosition(topChild)
                 headerView?.let {
