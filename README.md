@@ -4,8 +4,8 @@
 
 StickyTimeLine is timeline view for android.
 
-## What's New in 0.0.18? :tada:
-- Update library
+## What's New in 0.0.19? :tada:
+- Customize drawable for dots in timeline view (#10) by @carohauta :clap::clap::clap:
 
 ## How to Use
 
@@ -16,7 +16,7 @@ StickyTimeLine is timeline view for android.
     }
 
     dependencies {
-        compile 'com.github.sangcomz:StickyTimeLine:v0.0.18'
+        compile 'com.github.sangcomz:StickyTimeLine:v0.0.19'
     }
 ```
 ### Usage
