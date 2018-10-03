@@ -119,7 +119,8 @@ class MainActivity : AppCompatActivity() {
 |   sectionTitleTextSize   | To change section title text size              |      14sp     |
 |  sectionSubTitleTextSize | To change section sub title text size          |      12sp     |
 |     sectionLineWidth     | To change line width in timeline               |      4dp      |
-|     :new: isSticky       | To change Sticky functionality in the Timeline |      true     |
+|     isSticky             | To change Sticky functionality in the Timeline |      true     |
+| :new: customDotDrawable  | To change the circle to custom drawable        |      null     |
 
 ## Result Screen
 

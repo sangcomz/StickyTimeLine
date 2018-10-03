@@ -144,7 +144,7 @@ class RecyclerSectionItemDecoration(
             headerTitle = headerView.findViewById(R.id.list_item_section_title)
             headerSubTitle = headerView.findViewById(R.id.list_item_section_sub_title)
             val dot: ImageView = headerView.findViewById(R.id.dot)
-            dot.background = getOvalDrawable()
+            dot.background = recyclerViewAttr.customDotDrawable ?: getOvalDrawable()
             recyclerViewAttr.let { attrs ->
                 headerBackground?.apply {
                     setBackgroundColor(attrs.sectionBackgroundColor)
