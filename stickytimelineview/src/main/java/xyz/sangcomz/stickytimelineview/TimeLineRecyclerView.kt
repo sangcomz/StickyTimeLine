@@ -54,7 +54,8 @@ class TimeLineRecyclerView(context: Context, attrs: AttributeSet?) : RecyclerVie
                                         context.resources.getDimension(R.dimen.sub_title_text_size)),
                                 it.getDimension(R.styleable.TimeLineRecyclerView_timeLineWidth,
                                         context.resources.getDimension(R.dimen.line_width)),
-                                it.getBoolean(R.styleable.TimeLineRecyclerView_isSticky, true))
+                                it.getBoolean(R.styleable.TimeLineRecyclerView_isSticky, true),
+                                it.getDrawable(R.styleable.TimeLineRecyclerView_customDotDrawable))
             }
 
         }
