@@ -13,5 +13,6 @@
         <attr name="sectionTitleTextSize" format="dimension" />
         <attr name="sectionSubTitleTextSize" format="dimension" />
         <attr name="isSticky" format="boolean" />
+        <attr name="customDotDrawable" format="reference" />
     </declare-styleable>
 </resources>
