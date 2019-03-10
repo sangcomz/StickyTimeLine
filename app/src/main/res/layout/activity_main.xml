@@ -10,6 +10,5 @@
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:customDotDrawable="@drawable/ic_star"
         app:isSticky="true" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,7 +5,7 @@
 StickyTimeLine is timeline view for android.
 
 ## What's New in 0.0.19? :tada:
-- Customize drawable for dots in timeline view (#10) by [carohauta](https://github.com/carohauta) :clap::clap::clap:
+- change DotDrawable for each row of items(#16)
 
 ## How to Use
 
@@ -120,7 +120,7 @@ class MainActivity : AppCompatActivity() {
 |  sectionSubTitleTextSize | To change section sub title text size          |      12sp     |
 |     sectionLineWidth     | To change line width in timeline               |      4dp      |
 |     isSticky             | To change Sticky functionality in the Timeline |      true     |
-| :new: customDotDrawable  | To change the circle to custom drawable        |      null     |
+|    customDotDrawable     | To change the circle to custom drawable        |      null     |
 
 ## Result Screen
 
