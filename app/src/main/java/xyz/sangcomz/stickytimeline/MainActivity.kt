@@ -1,8 +1,8 @@
 package xyz.sangcomz.stickytimeline
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import xyz.sangcomz.stickytimelineview.RecyclerSectionItemDecoration
 import xyz.sangcomz.stickytimelineview.TimeLineRecyclerView
 import xyz.sangcomz.stickytimelineview.model.SectionInfo
@@ -16,9 +16,11 @@ class MainActivity : AppCompatActivity() {
         val recyclerView: TimeLineRecyclerView = findViewById(R.id.recycler_view)
 
         //Currently only LinearLayoutManager is supported.
-        recyclerView.layoutManager = LinearLayoutManager(this,
-                LinearLayoutManager.VERTICAL,
-                false)
+        recyclerView.layoutManager = LinearLayoutManager(
+            this,
+            LinearLayoutManager.VERTICAL,
+            false
+        )
 
         //Get data
         val singerList = getSingerList()
