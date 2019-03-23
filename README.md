@@ -5,7 +5,8 @@
 StickyTimeLine is timeline view for android.
 
 ## What's New in 0.0.19? :tada:
-- change DotDrawable for each row of items(#16)
+- change DotDrawable for each row of items[(#16)](https://github.com/sangcomz/StickyTimeLine/issues/16)
+- add java example[(#9)](https://github.com/sangcomz/StickyTimeLine/issues/9)
 
 ## How to Use
 
@@ -16,7 +17,7 @@ StickyTimeLine is timeline view for android.
     }
 
     dependencies {
-        compile 'com.github.sangcomz:StickyTimeLine:v0.0.19'
+        compile 'com.github.sangcomz:StickyTimeLine:v0.0.20'
     }
 ```
 ### Usage
@@ -202,6 +203,8 @@ public class JavaExampleActivity extends AppCompatActivity {
 
 ## Result Screen
 
+Feel free to send me a pull request with your app and I'll link you here:
+
 | Project Name | Result Screen   |
 |:---------:|---|
 | Sample  <p style="float:left;"> <a href="https://play.google.com/store/apps/details?id=xyz.sangcomz.stickytimeline"> <img HEIGHT="40" WIDTH="135" alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/apps/en-play-badge.png" /></a></p> |  <img src="/pic/sample_result.gif"> |
@@ -215,7 +218,7 @@ We welcome any contributions.
 
 # License
 
-    Copyright 2018 Jeong Seok-Won
+    Copyright 2019 Jeong Seok-Won
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
