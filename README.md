@@ -5,7 +5,8 @@
 StickyTimeLine is timeline view for android.
 
 ## What's New in 0.0.19? :tada:
-- Customize drawable for dots in timeline view (#10) by [carohauta](https://github.com/carohauta) :clap::clap::clap:
+- change DotDrawable for each row of items[(#16)](https://github.com/sangcomz/StickyTimeLine/issues/16)
+- add java example[(#9)](https://github.com/sangcomz/StickyTimeLine/issues/9)
 
 ## How to Use
 
@@ -16,7 +17,7 @@ StickyTimeLine is timeline view for android.
     }
 
     dependencies {
-        compile 'com.github.sangcomz:StickyTimeLine:v0.0.19'
+        compile 'com.github.sangcomz:StickyTimeLine:v0.0.20'
     }
 ```
 ### Usage
@@ -82,6 +83,84 @@ class MainActivity : AppCompatActivity() {
     }
 }
 ```
+
+#### JavaExampleActivity.java
+```java
+public class JavaExampleActivity extends AppCompatActivity {
+
+    private Drawable icFinkl, icBuzz, icWannaOne, icGirlsGeneration, icSolo;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        initDrawable();
+
+        TimeLineRecyclerView recyclerView = findViewById(R.id.recycler_view);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this,
+                RecyclerView.VERTICAL,
+                false));
+
+        List<Singer> singerList = getSingerList();
+
+        recyclerView.addItemDecoration(getSectionCallback(singerList));
+
+        recyclerView.setAdapter(new SingerAdapter(getLayoutInflater(), singerList, R.layout.recycler_row));
+    }
+
+    private RecyclerSectionItemDecoration.SectionCallback getSectionCallback(final List<Singer> singerList) {
+        return new RecyclerSectionItemDecoration.SectionCallback() {
+
+            @Nullable
+            @Override
+            public SectionInfo getSectionHeader(int position) {
+                Singer singer = singerList.get(position);
+                Drawable dot;
+                switch (singer.getGroup()) {
+                    case "FIN.K.L": {
+                        dot = icFinkl;
+                        break;
+                    }
+                    case "Girls' Generation": {
+                        dot = icGirlsGeneration;
+                        break;
+                    }
+                    case "Buzz": {
+                        dot = icBuzz;
+                        break;
+                    }
+                    case "Wanna One": {
+                        dot = icWannaOne;
+                        break;
+                    }
+                    default: {
+                        dot = icSolo;
+                    }
+                }
+                return new SectionInfo(singer.getDebuted(), singer.getGroup(), dot);
+            }
+
+            @Override
+            public boolean isSection(int position) {
+                return !singerList.get(position).getDebuted().equals(singerList.get(position - 1).getDebuted());
+            }
+        };
+    }
+
+    private List<Singer> getSingerList() {
+        return new SingerRepo().getSingerList();
+    }
+
+    private void initDrawable() {
+        icFinkl = AppCompatResources.getDrawable(this, R.drawable.ic_finkl);
+        icBuzz = AppCompatResources.getDrawable(this, R.drawable.ic_buzz);
+        icWannaOne = AppCompatResources.getDrawable(this, R.drawable.ic_wannaone);
+        icGirlsGeneration = AppCompatResources.getDrawable(this, R.drawable.ic_girlsgeneration);
+        icSolo = AppCompatResources.getDrawable(this, R.drawable.ic_wannaone);
+    }
+}
+```
 ##### caution
 - *Currently only LinearLayoutManager is supported.*
 
@@ -120,9 +199,11 @@ class MainActivity : AppCompatActivity() {
 |  sectionSubTitleTextSize | To change section sub title text size          |      12sp     |
 |     timeLineWidth        | To change line width in timeline               |      4dp      |
 |     isSticky             | To change Sticky functionality in the Timeline |      true     |
-| :new: customDotDrawable  | To change the circle to custom drawable        |      null     |
+|    customDotDrawable     | To change the circle to custom drawable        |      null     |
 
 ## Result Screen
+
+Feel free to send me a pull request with your app and I'll link you here:
 
 | Project Name | Result Screen   |
 |:---------:|---|
@@ -137,7 +218,7 @@ We welcome any contributions.
 
 # License
 
-    Copyright 2018 Jeong Seok-Won
+    Copyright 2019 Jeong Seok-Won
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.

@@ -19,6 +19,7 @@ class SingerRepo {
             singerList.add(Singer("FIN.K.L", "1998.05", "Lee Hyo Ri"))
 
             singerList.add(Singer("Solo", "1999.04", "Kim Bumsoo"))
+
             singerList.add(Singer("Solo", "1999.11", "Park Hyo Shin"))
             singerList.add(Singer("Solo", "1999.11", "Lee Soo Young"))
             singerList.add(Singer("Solo", "2000.11", "Sung Si Kyung"))

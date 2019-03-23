@@ -1,9 +1,9 @@
 package xyz.sangcomz.stickytimelineview
 
 import android.content.Context
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.RecyclerView
 import xyz.sangcomz.stickytimelineview.model.RecyclerViewAttr
 
 
