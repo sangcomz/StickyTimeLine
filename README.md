@@ -4,7 +4,7 @@
 
 StickyTimeLine is timeline view for android.
 
-## What's New in 0.0.19? :tada:
+## What's New in 0.0.20? :tada:
 - change DotDrawable for each row of items[(#16)](https://github.com/sangcomz/StickyTimeLine/issues/16)
 - add java example[(#9)](https://github.com/sangcomz/StickyTimeLine/issues/9)
 
