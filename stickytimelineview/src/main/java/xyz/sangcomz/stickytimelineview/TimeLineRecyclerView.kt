@@ -55,7 +55,9 @@ class TimeLineRecyclerView(context: Context, attrs: AttributeSet?) : RecyclerVie
                                 it.getDimension(R.styleable.TimeLineRecyclerView_timeLineWidth,
                                         context.resources.getDimension(R.dimen.line_width)),
                                 it.getBoolean(R.styleable.TimeLineRecyclerView_isSticky, true),
-                                it.getDrawable(R.styleable.TimeLineRecyclerView_customDotDrawable))
+                                it.getDrawable(R.styleable.TimeLineRecyclerView_customDotDrawable),
+                                it.getInt(R.styleable.TimeLineRecyclerView_mode,0))
+
             }
 
         }
@@ -68,9 +70,25 @@ class TimeLineRecyclerView(context: Context, attrs: AttributeSet?) : RecyclerVie
      */
     fun addItemDecoration(callback: RecyclerSectionItemDecoration.SectionCallback) {
         recyclerViewAttr?.let {
-            this.addItemDecoration(RecyclerSectionItemDecoration(context,
-                    callback,
-                    it))
+            val decoration : RecyclerView.ItemDecoration =
+            when(it.mode){
+                0x00->{ // vertical
+                    RecyclerSectionItemDecoration(context,
+                            callback,
+                            it)
+                }
+                0x01->{ // horizontal
+                    HorizontalSectionItemDecoration(context,
+                            callback,
+                            it)
+                }
+                else->{
+                    RecyclerSectionItemDecoration(context,
+                            callback,
+                            it)
+                }
+            }
+            this.addItemDecoration(decoration)
         }
     }
 }

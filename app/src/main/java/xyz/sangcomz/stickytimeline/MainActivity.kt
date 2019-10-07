@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         //Currently only LinearLayoutManager is supported.
         recyclerView.layoutManager = LinearLayoutManager(
             this,
-            RecyclerView.VERTICAL,
+            RecyclerView.HORIZONTAL,
             false
         )
 

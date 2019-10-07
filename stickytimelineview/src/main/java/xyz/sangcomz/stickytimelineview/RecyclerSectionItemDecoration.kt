@@ -1,11 +1,13 @@
 package xyz.sangcomz.stickytimelineview
 
+import android.app.ActionBar
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -199,10 +201,10 @@ class RecyclerSectionItemDecoration(
         paint.strokeWidth = recyclerViewAttr.sectionLineWidth
         c.drawLines(
             floatArrayOf(
-                defaultOffset * 3f,
-                0f,
-                defaultOffset * 3f,
-                parent.height.toFloat()
+                    defaultOffset * 3f,
+                    0f,
+                    defaultOffset * 3f,
+                    parent.height.toFloat()
             ), paint
         )
     }
@@ -242,7 +244,8 @@ class RecyclerSectionItemDecoration(
     private fun moveHeader(c: Canvas, topHeader: View, offset: Float) {
         if (!recyclerViewAttr.isSticky) return
         c.save()
-        c.translate(0f, offset)
+         c.translate(0f, offset)
+        //c.translate(offset,0f)
         topHeader.draw(c)
         c.restore()
     }
@@ -332,7 +335,6 @@ class RecyclerSectionItemDecoration(
         }
 
     }
-
 
     /**
      * Section-specific callback interface
