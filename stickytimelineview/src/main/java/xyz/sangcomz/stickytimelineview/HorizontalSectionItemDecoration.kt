@@ -2,11 +2,11 @@ package xyz.sangcomz.stickytimelineview
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import xyz.sangcomz.stickytimelineview.ext.DP
 import xyz.sangcomz.stickytimelineview.model.RecyclerViewAttr
 import xyz.sangcomz.stickytimelineview.model.SectionInfo
+import kotlin.math.max
 
 class HorizontalSectionItemDecoration(context: Context,
                                       private val sectionCallback: RecyclerSectionItemDecoration.SectionCallback,
@@ -31,6 +32,8 @@ class HorizontalSectionItemDecoration(context: Context,
     private var dot: AppCompatImageView? = null
     private var defaultOffset: Int = 8.DP(context).toInt()
     private var headerOffset = defaultOffset * 8
+
+    private var isSameTitle = false
 
     override fun getItemOffsets(
             outRect: Rect,
@@ -67,6 +70,7 @@ class HorizontalSectionItemDecoration(context: Context,
         for (i in 0 until parent.childCount) {
             val child = parent.getChildAt(i)
             val position = parent.getChildAdapterPosition(child)
+            if(!recyclerViewAttr.isSticky){
             if (getIsSection(position)) {
                 sectionCallback.getSectionHeader(position)?.let { sectionInfo ->
                     setHeaderView(sectionInfo)
@@ -74,10 +78,30 @@ class HorizontalSectionItemDecoration(context: Context,
                         drawHeader(c, child, it)
                         previousHeader = sectionInfo
                     }
+                }}
+            }else{
+                sectionCallback.getSectionHeader(position)?.let { sectionInfo ->
+                    if(sectionInfo.title == previousHeader.title){
+                        setHeaderView(sectionInfo)
+                        headerView?.let {
+                            isSameTitle = true
+                            drawHeader(c, child, it)
+                            previousHeader = sectionInfo
+                        }
+                    }else{
+                        setHeaderView(sectionInfo)
+                        headerView?.let {
+                            isSameTitle =false
+                            drawHeader(c, child, it)
+                            previousHeader = sectionInfo
+                        }
+                    }
                 }
+
             }
         }
     }
+
 
     private fun setHeaderView(sectionInfo: SectionInfo) {
         headerTitle?.text = sectionInfo.title
@@ -121,7 +145,7 @@ class HorizontalSectionItemDecoration(context: Context,
                     val customLine2 = TextView(context)
                     customLine.setBackgroundColor(attrs.sectionLineColor)
                     val width = (headerTitle!!.textSize * headerTitle!!.length().toFloat()).toInt()
-                    addView(customLine2,width,headerTitle!!.measuredHeight)
+                    addView(customLine2, width, headerTitle!!.measuredHeight)
                     addView(customLine, ViewGroup.LayoutParams.MATCH_PARENT, attrs.sectionLineWidth.toInt())
                 }
                 headerTitle?.apply {
@@ -147,16 +171,6 @@ class HorizontalSectionItemDecoration(context: Context,
                         false
                 )
     }
-
-
-    private fun getChildInContact(parent: RecyclerView, contactPoint: Int): View? =
-            (0 until parent.childCount)
-                    .map {
-                        parent.getChildAt(it)
-                    }
-                    .firstOrNull {
-                        it.top in contactPoint / 2..contactPoint
-                    }
 
     private fun fixLayoutSize(view: View, parent: ViewGroup) {
         val widthSpec = View.MeasureSpec.makeMeasureSpec(
@@ -209,13 +223,35 @@ class HorizontalSectionItemDecoration(context: Context,
     private fun drawHeader(c: Canvas, child: View, headerView: View) {
         c.save()
         if (recyclerViewAttr.isSticky) {
-            c.translate(
-                    0f,
-                    Math.max(
-                            0,
-                            0
-                    ).toFloat()
-            )
+            val leftMargin = defaultOffset * 6
+            Log.e("ㅇㅇㅇㅇ","$isSameTitle")
+            if(!isSameTitle){
+                if(child.left-leftMargin<0){
+                    if(child.right - leftMargin < headerTitle!!.left + headerTitle!!.length() + headerTitle!!.textSize){
+                        c.translate(
+                                (child.right - leftMargin - (headerTitle!!.left + headerTitle!!.length() + headerTitle!!.textSize)) ,
+                                0f
+                        )
+                    }else{
+                        c.translate(
+                                0f,
+                                0f
+                        )
+                    }
+                }
+                else{
+                    c.translate(
+                            (child.left - leftMargin).toFloat(),
+                            0f
+                    )
+                }
+            }else{
+                c.translate(
+                        0f,
+                        0f
+                )
+            }
+
         } else {
             val leftMargin = defaultOffset * 6
             c.translate(

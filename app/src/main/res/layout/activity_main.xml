@@ -10,7 +10,7 @@
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:isSticky="false"
+        app:isSticky="true"
         app:mode="horizontal"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>
