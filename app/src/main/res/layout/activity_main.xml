@@ -11,6 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:isSticky="true"
-        app:mode="horizontal"
+        app:mode="vertical"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>

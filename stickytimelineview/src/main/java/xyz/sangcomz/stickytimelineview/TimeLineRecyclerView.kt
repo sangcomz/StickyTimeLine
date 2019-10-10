@@ -56,7 +56,7 @@ class TimeLineRecyclerView(context: Context, attrs: AttributeSet?) : RecyclerVie
                                         context.resources.getDimension(R.dimen.line_width)),
                                 it.getBoolean(R.styleable.TimeLineRecyclerView_isSticky, true),
                                 it.getDrawable(R.styleable.TimeLineRecyclerView_customDotDrawable),
-                                it.getInt(R.styleable.TimeLineRecyclerView_mode,0))
+                                it.getInt(R.styleable.TimeLineRecyclerView_mode, 0))
 
             }
 
@@ -67,27 +67,28 @@ class TimeLineRecyclerView(context: Context, attrs: AttributeSet?) : RecyclerVie
      * Add RecyclerSectionItemDecoration for Sticky TimeLineView
      *
      * @param callback SectionCallback
+     * if you'd like to know more mode , look at res/values/attrs.xml
      */
     fun addItemDecoration(callback: RecyclerSectionItemDecoration.SectionCallback) {
         recyclerViewAttr?.let {
-            val decoration : RecyclerView.ItemDecoration =
-            when(it.mode){
-                0x00->{ // vertical
-                    RecyclerSectionItemDecoration(context,
-                            callback,
-                            it)
-                }
-                0x01->{ // horizontal
-                    HorizontalSectionItemDecoration(context,
-                            callback,
-                            it)
-                }
-                else->{
-                    RecyclerSectionItemDecoration(context,
-                            callback,
-                            it)
-                }
-            }
+            val decoration: ItemDecoration =
+                    when (it.mode) {
+                        0x00 -> { // vertical
+                            RecyclerSectionItemDecoration(context,
+                                    callback,
+                                    it)
+                        }
+                        0x01 -> { // horizontal
+                            HorizontalSectionItemDecoration(context,
+                                    callback,
+                                    it)
+                        }
+                        else -> {
+                            RecyclerSectionItemDecoration(context,
+                                    callback,
+                                    it)
+                        }
+                    }
             this.addItemDecoration(decoration)
         }
     }
