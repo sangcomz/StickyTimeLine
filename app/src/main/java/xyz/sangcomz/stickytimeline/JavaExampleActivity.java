@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import xyz.sangcomz.stickytimelineview.RecyclerSectionItemDecoration;
+import xyz.sangcomz.stickytimelineview.ItemDecoration.VerticalSectionItemDecoration;
 import xyz.sangcomz.stickytimelineview.TimeLineRecyclerView;
 import xyz.sangcomz.stickytimelineview.model.SectionInfo;
 
@@ -38,8 +38,8 @@ public class JavaExampleActivity extends AppCompatActivity {
         recyclerView.setAdapter(new SingerAdapter(getLayoutInflater(), singerList, R.layout.recycler_row));
     }
 
-    private RecyclerSectionItemDecoration.SectionCallback getSectionCallback(final List<Singer> singerList) {
-        return new RecyclerSectionItemDecoration.SectionCallback() {
+    private VerticalSectionItemDecoration.SectionCallback getSectionCallback(final List<Singer> singerList) {
+        return new VerticalSectionItemDecoration.SectionCallback() {
 
             @Nullable
             @Override

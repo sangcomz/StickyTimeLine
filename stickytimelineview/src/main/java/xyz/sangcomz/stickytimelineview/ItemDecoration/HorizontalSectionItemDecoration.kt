@@ -1,4 +1,4 @@
-package xyz.sangcomz.stickytimelineview
+package xyz.sangcomz.stickytimelineview.ItemDecoration
 
 import android.content.Context
 import android.graphics.Canvas
@@ -14,12 +14,13 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.RecyclerView
+import xyz.sangcomz.stickytimelineview.R
 import xyz.sangcomz.stickytimelineview.ext.DP
 import xyz.sangcomz.stickytimelineview.model.RecyclerViewAttr
 import xyz.sangcomz.stickytimelineview.model.SectionInfo
 
 class HorizontalSectionItemDecoration(context: Context,
-                                      private val sectionCallback: RecyclerSectionItemDecoration.SectionCallback,
+                                      private val sectionCallback: VerticalSectionItemDecoration.SectionCallback,
                                       private val recyclerViewAttr: RecyclerViewAttr) : RecyclerView.ItemDecoration() {
     private lateinit var headerView: View
     private lateinit var headerBackground: LinearLayout

@@ -1,13 +1,11 @@
-package xyz.sangcomz.stickytimelineview
+package xyz.sangcomz.stickytimelineview.ItemDecoration
 
-import android.app.ActionBar
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.RecyclerView
+import xyz.sangcomz.stickytimelineview.R
 import xyz.sangcomz.stickytimelineview.ext.DP
 import xyz.sangcomz.stickytimelineview.model.RecyclerViewAttr
 import xyz.sangcomz.stickytimelineview.model.SectionInfo
@@ -29,10 +28,10 @@ import xyz.sangcomz.stickytimelineview.model.SectionInfo
  *  I was inspired by his code. And I used some of his code in the library.
  *  https://github.com/paetztm/recycler_view_headers
  */
-class RecyclerSectionItemDecoration(
-    context: Context,
-    private val sectionCallback: SectionCallback,
-    private val recyclerViewAttr: RecyclerViewAttr
+class VerticalSectionItemDecoration(
+        context: Context,
+        private val sectionCallback: SectionCallback,
+        private val recyclerViewAttr: RecyclerViewAttr
 ) : RecyclerView.ItemDecoration() {
 
     private var headerView: View? = null
@@ -276,7 +275,7 @@ class RecyclerSectionItemDecoration(
     private fun inflateHeaderView(parent: RecyclerView): View {
         return LayoutInflater.from(parent.context)
             .inflate(
-                R.layout.recycler_section_header,
+                    R.layout.recycler_section_header,
                 parent,
                 false
             )

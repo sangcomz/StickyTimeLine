@@ -4,6 +4,8 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import xyz.sangcomz.stickytimelineview.ItemDecoration.HorizontalSectionItemDecoration
+import xyz.sangcomz.stickytimelineview.ItemDecoration.VerticalSectionItemDecoration
 import xyz.sangcomz.stickytimelineview.model.RecyclerViewAttr
 
 
@@ -26,6 +28,11 @@ import xyz.sangcomz.stickytimelineview.model.RecyclerViewAttr
 class TimeLineRecyclerView(context: Context, attrs: AttributeSet?) : RecyclerView(context, attrs) {
 
     private var recyclerViewAttr: RecyclerViewAttr? = null
+
+    companion object{
+        private const val MODE_VERTICAL = 0x00
+        private const val MODE_HORIZONTAL = 0x01
+    }
 
     init {
         attrs?.let {
@@ -64,27 +71,27 @@ class TimeLineRecyclerView(context: Context, attrs: AttributeSet?) : RecyclerVie
     }
 
     /**
-     * Add RecyclerSectionItemDecoration for Sticky TimeLineView
+     * Add VerticalSectionItemDecoration for Sticky TimeLineView
      *
      * @param callback SectionCallback
      * if you'd like to know more mode , look at res/values/attrs.xml
      */
-    fun addItemDecoration(callback: RecyclerSectionItemDecoration.SectionCallback) {
+    fun addItemDecoration(callback: VerticalSectionItemDecoration.SectionCallback) {
         recyclerViewAttr?.let {
             val decoration: ItemDecoration =
                     when (it.mode) {
-                        0x00 -> { // vertical
-                            RecyclerSectionItemDecoration(context,
+                        MODE_VERTICAL -> {
+                            VerticalSectionItemDecoration(context,
                                     callback,
                                     it)
                         }
-                        0x01 -> { // horizontal
+                        MODE_HORIZONTAL -> { // horizontal
                             HorizontalSectionItemDecoration(context,
                                     callback,
                                     it)
                         }
                         else -> {
-                            RecyclerSectionItemDecoration(context,
+                            VerticalSectionItemDecoration(context,
                                     callback,
                                     it)
                         }
