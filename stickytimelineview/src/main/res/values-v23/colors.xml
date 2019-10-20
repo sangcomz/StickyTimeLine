@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorDefaultBackground">#F9F9F9</color>
+    <color name="colorDefaultTitle">#414fca</color>
+    <color name="colorDefaultSubTitle">#d16767</color>
+    <color name="colorDefaultLine">#51ae45</color>
+    <color name="colorDefaultCircle">#51ae45</color>
+    <color name="colorDefaultStroke">#F9F9F9</color>
+</resources>
