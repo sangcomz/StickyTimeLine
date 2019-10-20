@@ -85,7 +85,7 @@ class TimeLineRecyclerView(context: Context, attrs: AttributeSet?) : RecyclerVie
                                     callback,
                                     it)
                         }
-                        MODE_HORIZONTAL -> { // horizontal
+                        MODE_HORIZONTAL -> {
                             HorizontalSectionItemDecoration(context,
                                     callback,
                                     it)

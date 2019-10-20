@@ -14,12 +14,12 @@
         android:layout_marginRight="2dp"
         android:layout_marginLeft="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/v_item_background"
+        app:layout_constraintEnd_toStartOf="@+id/lin_item_background"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:id="@+id/v_item_background"
+        android:id="@+id/lin_item_background"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginLeft="8dp"
@@ -40,7 +40,7 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/dot"
         app:layout_constraintHorizontal_bias="0.07"
-        app:layout_constraintStart_toStartOf="@+id/v_item_background"
+        app:layout_constraintStart_toStartOf="@+id/lin_item_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/dot"
         android:text="Title"

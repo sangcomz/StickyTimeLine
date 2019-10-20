@@ -31,6 +31,7 @@ class HorizontalSectionItemDecoration(context: Context,
 
     private var defaultOffset: Int = 8.DP(context).toInt()
     private var headerOffset = defaultOffset * 8
+    private val divisionOffset = 1.DP(context).toInt()
 
     private var isSameTitle = false
 
@@ -47,7 +48,7 @@ class HorizontalSectionItemDecoration(context: Context,
                 state
         )
 
-        outRect.top = headerOffset
+        outRect.top = headerOffset + divisionOffset
 
         val leftMargin = defaultOffset * 6
         val rightMargin = defaultOffset * 2
@@ -182,7 +183,7 @@ class HorizontalSectionItemDecoration(context: Context,
     private fun getHeaderView(parent: RecyclerView) {
         headerView = inflateHeaderView(parent)
         headerView.apply {
-            headerBackground = findViewById(R.id.v_item_background)
+            headerBackground = findViewById(R.id.lin_item_background)
             headerTitle = findViewById(R.id.list_item_section_title)
             headerSubTitle = findViewById(R.id.list_item_section_sub_title)
             dot = findViewById(R.id.dot)
