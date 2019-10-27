@@ -15,5 +15,6 @@ data class RecyclerViewAttr(val sectionBackgroundColor: Int,
                             val sectionSubTitleTextSize: Float,
                             val sectionLineWidth: Float,
                             val isSticky: Boolean,
-                            val customDotDrawable: Drawable?
+                            val customDotDrawable: Drawable?,
+                            val mode : Int
 )

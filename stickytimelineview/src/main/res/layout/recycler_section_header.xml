@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/recycler_section_header_height"
-    android:paddingLeft="@dimen/header_padding_left">
+    android:paddingLeft="@dimen/header_padding_left"
+    >
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/dot"
@@ -13,19 +14,22 @@
         android:layout_marginRight="2dp"
         android:layout_marginLeft="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/v_item_background"
+        app:layout_constraintEnd_toStartOf="@+id/lin_item_background"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <View
-        android:id="@+id/v_item_background"
+    <LinearLayout
+        android:id="@+id/lin_item_background"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginLeft="8dp"
+        android:gravity="center"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/dot"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/list_item_section_title"
@@ -35,11 +39,13 @@
         android:gravity="center_vertical"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/dot"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.07"
-        app:layout_constraintStart_toStartOf="@+id/v_item_background"
+        app:layout_constraintStart_toStartOf="@+id/lin_item_background"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/dot"
-        tools:text="Title" />
+        android:text="Title"
+        android:textSize="@dimen/title_text_size"
+        />
 
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -48,11 +54,13 @@
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-light"
         android:gravity="top"
-        app:layout_constraintEnd_toEndOf="@+id/list_item_section_title"
         app:layout_constraintHorizontal_bias="0.505"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/list_item_section_title"
         app:layout_constraintTop_toBottomOf="@+id/list_item_section_title"
-        tools:text="Sub Title" />
+        android:text="Sub Title"
+        android:textSize="@dimen/title_text_size"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
