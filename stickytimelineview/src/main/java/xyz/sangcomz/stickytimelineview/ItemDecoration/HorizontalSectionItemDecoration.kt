@@ -19,9 +19,15 @@ import xyz.sangcomz.stickytimelineview.ext.DP
 import xyz.sangcomz.stickytimelineview.model.RecyclerViewAttr
 import xyz.sangcomz.stickytimelineview.model.SectionInfo
 
-class HorizontalSectionItemDecoration(context: Context,
-                                      private val sectionCallback: VerticalSectionItemDecoration.SectionCallback,
-                                      private val recyclerViewAttr: RecyclerViewAttr) : RecyclerView.ItemDecoration() {
+
+//section Header인지 체크하는 로직 수정
+//움직이는 헤더 동작 구현
+
+class HorizontalSectionItemDecoration(
+    context: Context,
+    private val sectionCallback: VerticalSectionItemDecoration.SectionCallback,
+    private val recyclerViewAttr: RecyclerViewAttr
+) : RecyclerView.ItemDecoration() {
     private lateinit var headerView: View
     private lateinit var headerBackground: LinearLayout
     private lateinit var headerTitle: TextView
@@ -33,25 +39,23 @@ class HorizontalSectionItemDecoration(context: Context,
     private var headerOffset = defaultOffset * 8
     private val divisionOffset = 1.DP(context).toInt()
 
-    private var isSameTitle = false
-
     override fun getItemOffsets(
-            outRect: Rect,
-            view: View,
-            parent: RecyclerView,
-            state: RecyclerView.State
+        outRect: Rect,
+        view: View,
+        parent: RecyclerView,
+        state: RecyclerView.State
     ) {
         super.getItemOffsets(
-                outRect,
-                view,
-                parent,
-                state
+            outRect,
+            view,
+            parent,
+            state
         )
 
         outRect.top = headerOffset + divisionOffset
 
-        val leftMargin = defaultOffset * 6
-        val rightMargin = defaultOffset * 2
+        val leftMargin = defaultOffset
+        val rightMargin = defaultOffset
 
         outRect.bottom = defaultOffset / 2
         outRect.left = leftMargin
@@ -62,7 +66,6 @@ class HorizontalSectionItemDecoration(context: Context,
 
     override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         super.onDrawOver(c, parent, state)
-
         if (!::previousHeader.isInitialized) previousHeader = SectionInfo("")
         if (!::headerView.isInitialized) getHeaderView(parent)
         drawLine(c, parent)
@@ -82,12 +85,18 @@ class HorizontalSectionItemDecoration(context: Context,
             } else {
                 sectionCallback.getSectionHeader(position)?.let { sectionInfo ->
                     if (sectionInfo.title == previousHeader.title) {
-                        isSameTitle = true
-                        setHeaderView(sectionInfo)
-                        drawHeader(c, child, headerView)
+//                        setHeaderView(sectionInfo)
+//                        drawHeader(c, child, headerView)
+//                        val offset =
+//                            if (topChildPosition == 0
+//                                && childInContact.top - (headerOffset * 2) == (-1 * headerOffset)
+//                            ) 0f
+//                            else
+//                                (childInContact.top - (headerOffset * 2)).toFloat()
+
+                        moveHeader(c, headerView, 10f)
                         previousHeader = sectionInfo
                     } else {
-                        isSameTitle = false
                         setHeaderView(sectionInfo)
                         drawHeader(c, child, headerView)
                         previousHeader = sectionInfo
@@ -131,12 +140,12 @@ class HorizontalSectionItemDecoration(context: Context,
         paint.color = recyclerViewAttr.sectionLineColor
         paint.strokeWidth = recyclerViewAttr.sectionLineWidth
         c.drawLines(
-                floatArrayOf(
-                        0f,
-                        defaultOffset * 4f,
-                        parent.width.toFloat(),
-                        defaultOffset * 4f
-                ), paint
+            floatArrayOf(
+                0f,
+                defaultOffset * 4f,
+                parent.width.toFloat(),
+                defaultOffset * 4f
+            ), paint
         )
     }
 
@@ -162,21 +171,32 @@ class HorizontalSectionItemDecoration(context: Context,
      */
     private fun drawHeader(c: Canvas, child: View, headerView: View) {
         c.save()
-        val leftMargin = defaultOffset * 6
+        val leftMargin = defaultOffset * 2
         if (recyclerViewAttr.isSticky) {
             val headerTitleWidth = headerTitle.left + headerTitle.length() * headerTitle.textSize
-            if (!isSameTitle) {
-                if (child.left - leftMargin < 0) {
-                    if (child.right + leftMargin < headerTitleWidth)
-                        c.translate((child.right + leftMargin - headerTitleWidth), 0f)
-                    else
-                        c.translate(0f, 0f)
-                } else
-                    c.translate((child.left - leftMargin).toFloat(), 0f)
-            } else c.translate(0f, 0f)
+//            if (!isSameTitle) {
+            if (child.left - leftMargin < 0) {
+                if (child.right + leftMargin < headerTitleWidth)
+                    c.translate((child.right + leftMargin - headerTitleWidth), 0f)
+                else
+                    c.translate(0f, 0f)
+            } else
+                c.translate((child.left - leftMargin).toFloat(), 0f)
+//            } else c.translate(0f, 0f)
         } else
             c.translate((child.left - leftMargin).toFloat(), 0f)
         headerView.draw(c)
+        c.restore()
+    }
+
+    /**
+     * Moving parts when headers meet
+     */
+    private fun moveHeader(c: Canvas, topHeader: View, offset: Float) {
+        if (!recyclerViewAttr.isSticky) return
+        c.save()
+        c.translate(0f, offset)
+        topHeader.draw(c)
         c.restore()
     }
 
@@ -195,7 +215,11 @@ class HorizontalSectionItemDecoration(context: Context,
                     titleTransparentLine.setBackgroundColor(attrs.sectionLineColor)
                     val width = (headerTitle.textSize * headerTitle.length().toFloat()).toInt()
                     addView(titleBackgroundLine, width, headerTitle.measuredHeight)
-                    addView(titleTransparentLine, ViewGroup.LayoutParams.MATCH_PARENT, attrs.sectionLineWidth.toInt())
+                    addView(
+                        titleTransparentLine,
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        attrs.sectionLineWidth.toInt()
+                    )
                 }
                 headerTitle.apply {
                     setPadding(defaultOffset / 2, 0, defaultOffset / 2, 0)
@@ -214,11 +238,11 @@ class HorizontalSectionItemDecoration(context: Context,
 
     private fun inflateHeaderView(parent: RecyclerView): View {
         return LayoutInflater.from(parent.context)
-                .inflate(
-                        R.layout.recycler_section_header,
-                        parent,
-                        false
-                )
+            .inflate(
+                R.layout.recycler_section_header,
+                parent,
+                false
+            )
     }
 
     /**
@@ -227,35 +251,35 @@ class HorizontalSectionItemDecoration(context: Context,
      */
     private fun fixLayoutSize(view: View, parent: ViewGroup) {
         val widthSpec = View.MeasureSpec.makeMeasureSpec(
-                parent.width,
-                View.MeasureSpec.EXACTLY
+            parent.width,
+            View.MeasureSpec.EXACTLY
         )
         val heightSpec = View.MeasureSpec.makeMeasureSpec(
-                parent.height,
-                View.MeasureSpec.UNSPECIFIED
+            parent.height,
+            View.MeasureSpec.UNSPECIFIED
         )
 
         val childWidth = ViewGroup.getChildMeasureSpec(
-                widthSpec,
-                0,
-                view.layoutParams.width
+            widthSpec,
+            0,
+            view.layoutParams.width
         )
         val childHeight = ViewGroup.getChildMeasureSpec(
-                heightSpec,
-                0,
-                view.layoutParams.height
+            heightSpec,
+            0,
+            view.layoutParams.height
         )
 
         view.measure(
-                childWidth,
-                childHeight
+            childWidth,
+            childHeight
         )
 
         view.layout(
-                0,
-                0,
-                view.measuredWidth,
-                view.measuredHeight
+            0,
+            0,
+            view.measuredWidth,
+            view.measuredHeight
         )
     }
 

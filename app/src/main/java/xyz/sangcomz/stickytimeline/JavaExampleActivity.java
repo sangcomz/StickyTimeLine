@@ -3,14 +3,15 @@ package xyz.sangcomz.stickytimeline;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
-import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
+
 import xyz.sangcomz.stickytimelineview.ItemDecoration.VerticalSectionItemDecoration;
 import xyz.sangcomz.stickytimelineview.TimeLineRecyclerView;
 import xyz.sangcomz.stickytimelineview.model.SectionInfo;
@@ -25,7 +26,7 @@ public class JavaExampleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         initDrawable();
 
-        TimeLineRecyclerView recyclerView = findViewById(R.id.recycler_view);
+        TimeLineRecyclerView recyclerView = findViewById(R.id.vertical_recycler_view);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this,
                 RecyclerView.VERTICAL,
@@ -35,7 +36,7 @@ public class JavaExampleActivity extends AppCompatActivity {
 
         recyclerView.addItemDecoration(getSectionCallback(singerList));
 
-        recyclerView.setAdapter(new SingerAdapter(getLayoutInflater(), singerList, R.layout.recycler_row));
+        recyclerView.setAdapter(new SingerAdapter(getLayoutInflater(), singerList, R.layout.recycler_vertical_row));
     }
 
     private VerticalSectionItemDecoration.SectionCallback getSectionCallback(final List<Singer> singerList) {
