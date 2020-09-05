@@ -7,7 +7,8 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_main.*
-import xyz.sangcomz.stickytimelineview.ItemDecoration.VerticalSectionItemDecoration
+import xyz.sangcomz.stickytimelineview.callback.SectionCallback
+import xyz.sangcomz.stickytimelineview.decoration.VerticalSectionItemDecoration
 import xyz.sangcomz.stickytimelineview.model.SectionInfo
 
 class MainActivity : AppCompatActivity() {
@@ -77,8 +78,8 @@ class MainActivity : AppCompatActivity() {
 
 
     //Get SectionCallback method
-    private fun getSectionCallback(singerList: List<Singer>): VerticalSectionItemDecoration.SectionCallback {
-        return object : VerticalSectionItemDecoration.SectionCallback {
+    private fun getSectionCallback(singerList: List<Singer>): SectionCallback {
+        return object : SectionCallback {
             //In your data, implement a method to determine if this is a section.
             override fun isSection(position: Int): Boolean =
                 singerList[position].debuted != singerList[position - 1].debuted

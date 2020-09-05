@@ -12,8 +12,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-import xyz.sangcomz.stickytimelineview.ItemDecoration.VerticalSectionItemDecoration;
 import xyz.sangcomz.stickytimelineview.TimeLineRecyclerView;
+import xyz.sangcomz.stickytimelineview.callback.SectionCallback;
 import xyz.sangcomz.stickytimelineview.model.SectionInfo;
 
 public class JavaExampleActivity extends AppCompatActivity {
@@ -39,8 +39,8 @@ public class JavaExampleActivity extends AppCompatActivity {
         recyclerView.setAdapter(new SingerAdapter(getLayoutInflater(), singerList, R.layout.recycler_vertical_row));
     }
 
-    private VerticalSectionItemDecoration.SectionCallback getSectionCallback(final List<Singer> singerList) {
-        return new VerticalSectionItemDecoration.SectionCallback() {
+    private SectionCallback getSectionCallback(final List<Singer> singerList) {
+        return new SectionCallback() {
 
             @Nullable
             @Override
