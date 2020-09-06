@@ -6,8 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import xyz.sangcomz.stickytimelineview.RecyclerSectionItemDecoration
-import xyz.sangcomz.stickytimelineview.TimeLineRecyclerView
+import kotlinx.android.synthetic.main.activity_main.*
+import xyz.sangcomz.stickytimelineview.callback.SectionCallback
+import xyz.sangcomz.stickytimelineview.decoration.VerticalSectionItemDecoration
 import xyz.sangcomz.stickytimelineview.model.SectionInfo
 
 class MainActivity : AppCompatActivity() {
@@ -28,32 +29,62 @@ class MainActivity : AppCompatActivity() {
         AppCompatResources.getDrawable(this@MainActivity, R.drawable.ic_solo)
     }
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        initVerticalRecyclerView()
+        initHorizontalRecyclerView()
+    }
 
-        val recyclerView: TimeLineRecyclerView = findViewById(R.id.recycler_view)
+    private fun initVerticalRecyclerView() {
+        val singerList = getSingerList()
+        vertical_recycler_view.adapter = SingerAdapter(
+            layoutInflater,
+            singerList,
+            R.layout.recycler_vertical_row
+        )
 
         //Currently only LinearLayoutManager is supported.
-        recyclerView.layoutManager = LinearLayoutManager(
+        vertical_recycler_view.layoutManager = LinearLayoutManager(
             this,
             RecyclerView.VERTICAL,
             false
         )
 
-        //Get data
+        vertical_recycler_view.addItemDecoration(getSectionCallback(singerList))
+    }
+
+    private fun initHorizontalRecyclerView() {
         val singerList = getSingerList()
-
-
-        //Add RecyclerSectionItemDecoration.SectionCallback
-        recyclerView.addItemDecoration(getSectionCallback(singerList))
-
-        //Set Adapter
-        recyclerView.adapter = SingerAdapter(
+        horizontal_recycler_view.adapter = SingerAdapter(
             layoutInflater,
             singerList,
-            R.layout.recycler_row
+            R.layout.recycler_horizontal_row
         )
+
+        horizontal_recycler_view2.adapter = SingerAdapter(
+            layoutInflater,
+            singerList,
+            R.layout.recycler_horizontal_row
+        )
+
+
+        //Currently only LinearLayoutManager is supported.
+        horizontal_recycler_view.layoutManager = LinearLayoutManager(
+            this,
+            RecyclerView.HORIZONTAL,
+            false
+        )
+
+        horizontal_recycler_view2.layoutManager = LinearLayoutManager(
+            this,
+            RecyclerView.HORIZONTAL,
+            false
+        )
+
+        horizontal_recycler_view.addItemDecoration(getSectionCallback(singerList))
+        horizontal_recycler_view2.addItemDecoration(getSectionCallback(singerList))
     }
 
     //Get data method
@@ -61,8 +92,8 @@ class MainActivity : AppCompatActivity() {
 
 
     //Get SectionCallback method
-    private fun getSectionCallback(singerList: List<Singer>): RecyclerSectionItemDecoration.SectionCallback {
-        return object : RecyclerSectionItemDecoration.SectionCallback {
+    private fun getSectionCallback(singerList: List<Singer>): SectionCallback {
+        return object : SectionCallback {
             //In your data, implement a method to determine if this is a section.
             override fun isSection(position: Int): Boolean =
                 singerList[position].debuted != singerList[position - 1].debuted

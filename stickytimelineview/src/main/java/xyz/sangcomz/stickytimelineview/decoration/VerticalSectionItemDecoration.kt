@@ -1,4 +1,4 @@
-package xyz.sangcomz.stickytimelineview
+package xyz.sangcomz.stickytimelineview.decoration
 
 import android.content.Context
 import android.graphics.Canvas
@@ -13,6 +13,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.RecyclerView
+import xyz.sangcomz.stickytimelineview.R
+import xyz.sangcomz.stickytimelineview.callback.SectionCallback
 import xyz.sangcomz.stickytimelineview.ext.DP
 import xyz.sangcomz.stickytimelineview.model.RecyclerViewAttr
 import xyz.sangcomz.stickytimelineview.model.SectionInfo
@@ -27,7 +29,7 @@ import xyz.sangcomz.stickytimelineview.model.SectionInfo
  *  I was inspired by his code. And I used some of his code in the library.
  *  https://github.com/paetztm/recycler_view_headers
  */
-class RecyclerSectionItemDecoration(
+class VerticalSectionItemDecoration(
     context: Context,
     private val sectionCallback: SectionCallback,
     private val recyclerViewAttr: RecyclerViewAttr
@@ -141,7 +143,7 @@ class RecyclerSectionItemDecoration(
     private fun getHeaderView(parent: RecyclerView) {
         headerView = inflateHeaderView(parent)
         headerView?.let { headerView ->
-            headerBackground = headerView.findViewById(R.id.v_item_background)
+            headerBackground = headerView.findViewById(R.id.lin_item_background)
             headerTitle = headerView.findViewById(R.id.list_item_section_title)
             headerSubTitle = headerView.findViewById(R.id.list_item_section_sub_title)
             dot = headerView.findViewById(R.id.dot)
@@ -207,9 +209,6 @@ class RecyclerSectionItemDecoration(
         )
     }
 
-    /**
-     *
-     */
     private fun getChildInContact(parent: RecyclerView, contactPoint: Int): View? =
         (0 until parent.childCount)
             .map {
@@ -225,8 +224,8 @@ class RecyclerSectionItemDecoration(
     private fun getOvalDrawable(): Drawable {
         val strokeWidth = defaultOffset / 2
         val roundRadius = defaultOffset * 2
-        val strokeColor = recyclerViewAttr.sectionStrokeColor
-        val fillColor = recyclerViewAttr.sectionCircleColor
+        val strokeColor = recyclerViewAttr.sectionDotStrokeColor
+        val fillColor = recyclerViewAttr.sectionDotStrokeColor
 
         val gd = GradientDrawable()
         gd.setColor(fillColor)
@@ -253,18 +252,9 @@ class RecyclerSectionItemDecoration(
     private fun drawHeader(c: Canvas, child: View, headerView: View) {
         c.save()
         if (recyclerViewAttr.isSticky) {
-            c.translate(
-                0f,
-                Math.max(
-                    0,
-                    child.top - headerView.height
-                ).toFloat()
-            )
+            c.translate(0f, 0.coerceAtLeast(child.top - headerView.height).toFloat())
         } else {
-            c.translate(
-                0f,
-                (child.top - headerView.height).toFloat()
-            )
+            c.translate(0f, (child.top - headerView.height).toFloat())
         }
         headerView.draw(c)
         c.restore()
@@ -331,22 +321,6 @@ class RecyclerSectionItemDecoration(
             sectionCallback.isSection(position)
         }
 
-    }
-
-
-    /**
-     * Section-specific callback interface
-     */
-    interface SectionCallback {
-        /**
-         * To check if section is
-         */
-        fun isSection(position: Int): Boolean
-
-        /**
-         * Functions that return a section header in a section
-         */
-        fun getSectionHeader(position: Int): SectionInfo?
     }
 }
 
