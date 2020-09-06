@@ -63,6 +63,13 @@ class MainActivity : AppCompatActivity() {
             R.layout.recycler_horizontal_row
         )
 
+        horizontal_recycler_view2.adapter = SingerAdapter(
+            layoutInflater,
+            singerList,
+            R.layout.recycler_horizontal_row
+        )
+
+
         //Currently only LinearLayoutManager is supported.
         horizontal_recycler_view.layoutManager = LinearLayoutManager(
             this,
@@ -70,7 +77,14 @@ class MainActivity : AppCompatActivity() {
             false
         )
 
+        horizontal_recycler_view2.layoutManager = LinearLayoutManager(
+            this,
+            RecyclerView.HORIZONTAL,
+            false
+        )
+
         horizontal_recycler_view.addItemDecoration(getSectionCallback(singerList))
+        horizontal_recycler_view2.addItemDecoration(getSectionCallback(singerList))
     }
 
     //Get data method
