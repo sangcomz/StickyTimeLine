@@ -1,4 +1,4 @@
-package xyz.sangcomz.stickytimelineview.ItemDecoration
+package xyz.sangcomz.stickytimelineview.decoration
 
 import android.content.Context
 import android.graphics.Canvas
@@ -14,6 +14,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.RecyclerView
 import xyz.sangcomz.stickytimelineview.R
+import xyz.sangcomz.stickytimelineview.callback.SectionCallback
 import xyz.sangcomz.stickytimelineview.ext.DP
 import xyz.sangcomz.stickytimelineview.model.RecyclerViewAttr
 import xyz.sangcomz.stickytimelineview.model.SectionInfo
@@ -29,9 +30,9 @@ import xyz.sangcomz.stickytimelineview.model.SectionInfo
  *  https://github.com/paetztm/recycler_view_headers
  */
 class VerticalSectionItemDecoration(
-        context: Context,
-        private val sectionCallback: SectionCallback,
-        private val recyclerViewAttr: RecyclerViewAttr
+    context: Context,
+    private val sectionCallback: SectionCallback,
+    private val recyclerViewAttr: RecyclerViewAttr
 ) : RecyclerView.ItemDecoration() {
 
     private var headerView: View? = null
@@ -48,16 +49,16 @@ class VerticalSectionItemDecoration(
      * There is a difference in top offset between sections and not sections.
      */
     override fun getItemOffsets(
-            outRect: Rect,
-            view: View,
-            parent: RecyclerView,
-            state: RecyclerView.State
+        outRect: Rect,
+        view: View,
+        parent: RecyclerView,
+        state: RecyclerView.State
     ) {
         super.getItemOffsets(
-                outRect,
-                view,
-                parent,
-                state
+            outRect,
+            view,
+            parent,
+            state
         )
 
         val pos = parent.getChildAdapterPosition(view)
@@ -88,9 +89,9 @@ class VerticalSectionItemDecoration(
      */
     override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         super.onDrawOver(
-                c,
-                parent,
-                state
+            c,
+            parent,
+            state
         )
         var previousHeader = SectionInfo("")
         if (headerView == null) getHeaderView(parent)
@@ -108,11 +109,11 @@ class VerticalSectionItemDecoration(
                         previousHeader = sectionInfo
                         setHeaderView(sectionInfo)
                         val offset =
-                                if (topChildPosition == 0
-                                        && childInContact.top - (headerOffset * 2) == (-1 * headerOffset)
-                                ) 0f
-                                else
-                                    (childInContact.top - (headerOffset * 2)).toFloat()
+                            if (topChildPosition == 0
+                                && childInContact.top - (headerOffset * 2) == (-1 * headerOffset)
+                            ) 0f
+                            else
+                                (childInContact.top - (headerOffset * 2)).toFloat()
 
                         moveHeader(c, it, offset)
                     }
@@ -199,26 +200,23 @@ class VerticalSectionItemDecoration(
         paint.color = recyclerViewAttr.sectionLineColor
         paint.strokeWidth = recyclerViewAttr.sectionLineWidth
         c.drawLines(
-                floatArrayOf(
-                        defaultOffset * 3f,
-                        0f,
-                        defaultOffset * 3f,
-                        parent.height.toFloat()
-                ), paint
+            floatArrayOf(
+                defaultOffset * 3f,
+                0f,
+                defaultOffset * 3f,
+                parent.height.toFloat()
+            ), paint
         )
     }
 
-    /**
-     *
-     */
     private fun getChildInContact(parent: RecyclerView, contactPoint: Int): View? =
-            (0 until parent.childCount)
-                    .map {
-                        parent.getChildAt(it)
-                    }
-                    .firstOrNull {
-                        it.top in contactPoint / 2..contactPoint
-                    }
+        (0 until parent.childCount)
+            .map {
+                parent.getChildAt(it)
+            }
+            .firstOrNull {
+                it.top in contactPoint / 2..contactPoint
+            }
 
     /**
      * Returns the oval dotDrawable of the timeline.
@@ -226,8 +224,8 @@ class VerticalSectionItemDecoration(
     private fun getOvalDrawable(): Drawable {
         val strokeWidth = defaultOffset / 2
         val roundRadius = defaultOffset * 2
-        val strokeColor = recyclerViewAttr.sectionStrokeColor
-        val fillColor = recyclerViewAttr.sectionCircleColor
+        val strokeColor = recyclerViewAttr.sectionDotStrokeColor
+        val fillColor = recyclerViewAttr.sectionDotStrokeColor
 
         val gd = GradientDrawable()
         gd.setColor(fillColor)
@@ -254,18 +252,9 @@ class VerticalSectionItemDecoration(
     private fun drawHeader(c: Canvas, child: View, headerView: View) {
         c.save()
         if (recyclerViewAttr.isSticky) {
-            c.translate(
-                    0f,
-                    Math.max(
-                            0,
-                            child.top - headerView.height
-                    ).toFloat()
-            )
+            c.translate(0f, 0.coerceAtLeast(child.top - headerView.height).toFloat())
         } else {
-            c.translate(
-                    0f,
-                    (child.top - headerView.height).toFloat()
-            )
+            c.translate(0f, (child.top - headerView.height).toFloat())
         }
         headerView.draw(c)
         c.restore()
@@ -273,11 +262,11 @@ class VerticalSectionItemDecoration(
 
     private fun inflateHeaderView(parent: RecyclerView): View {
         return LayoutInflater.from(parent.context)
-                .inflate(
-                        R.layout.recycler_section_header,
-                        parent,
-                        false
-                )
+            .inflate(
+                R.layout.recycler_section_header,
+                parent,
+                false
+            )
     }
 
     /**
@@ -286,35 +275,35 @@ class VerticalSectionItemDecoration(
      */
     private fun fixLayoutSize(view: View, parent: ViewGroup) {
         val widthSpec = View.MeasureSpec.makeMeasureSpec(
-                parent.width,
-                View.MeasureSpec.EXACTLY
+            parent.width,
+            View.MeasureSpec.EXACTLY
         )
         val heightSpec = View.MeasureSpec.makeMeasureSpec(
-                parent.height,
-                View.MeasureSpec.UNSPECIFIED
+            parent.height,
+            View.MeasureSpec.UNSPECIFIED
         )
 
         val childWidth = ViewGroup.getChildMeasureSpec(
-                widthSpec,
-                parent.paddingLeft + parent.paddingRight,
-                view.layoutParams.width
+            widthSpec,
+            parent.paddingLeft + parent.paddingRight,
+            view.layoutParams.width
         )
         val childHeight = ViewGroup.getChildMeasureSpec(
-                heightSpec,
-                parent.paddingTop + parent.paddingBottom,
-                view.layoutParams.height
+            heightSpec,
+            parent.paddingTop + parent.paddingBottom,
+            view.layoutParams.height
         )
 
         view.measure(
-                childWidth,
-                childHeight
+            childWidth,
+            childHeight
         )
 
         view.layout(
-                0,
-                0,
-                view.measuredWidth,
-                view.measuredHeight
+            0,
+            0,
+            view.measuredWidth,
+            view.measuredHeight
         )
     }
 
@@ -332,21 +321,6 @@ class VerticalSectionItemDecoration(
             sectionCallback.isSection(position)
         }
 
-    }
-
-    /**
-     * Section-specific callback interface
-     */
-    interface SectionCallback {
-        /**
-         * To check if section is
-         */
-        fun isSection(position: Int): Boolean
-
-        /**
-         * Functions that return a section header in a section
-         */
-        fun getSectionHeader(position: Int): SectionInfo?
     }
 }
 

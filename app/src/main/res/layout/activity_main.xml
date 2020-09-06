@@ -6,11 +6,92 @@
     android:layout_height="match_parent"
     tools:context="xyz.sangcomz.stickytimeline.MainActivity">
 
-    <xyz.sangcomz.stickytimelineview.TimeLineRecyclerView
-        android:id="@+id/recycler_view"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/vertical_text_view"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="#2196F3"
+        android:paddingStart="8dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="16dp"
+        android:text="VERTICAL"
+        android:textColor="#ffffff"
+        android:textSize="24dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <xyz.sangcomz.stickytimelineview.TimeLineRecyclerView
+        android:id="@+id/vertical_recycler_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:isSticky="true"
-        app:mode="vertical"
-        />
+        app:layout_constraintBottom_toTopOf="@id/guideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/vertical_text_view"
+        app:timeLineColor="#2196F3"
+        app:timeLineMode="vertical"
+        app:timeLineWidth="2dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent=".5" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent=".8" />
+
+    <TextView
+        android:id="@+id/horizontal_text_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#3F51B5"
+        android:paddingStart="8dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="16dp"
+        android:text="HORIZONTAL"
+        android:textColor="#ffffff"
+        android:textSize="24dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guideline" />
+
+    <xyz.sangcomz.stickytimelineview.TimeLineRecyclerView
+        android:id="@+id/horizontal_recycler_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:isSticky="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/horizontal_text_view"
+        app:sectionBackgroundColor="#3F51B5"
+        app:sectionBackgroundColorMode="toTimeLine"
+        app:sectionSubTitleTextColor="#CDFFFFFF"
+        app:sectionTitleTextColor="#ffffff"
+        app:timeLineColor="#3F51B5"
+        app:timeLineMode="horizontal" />
+
+    <xyz.sangcomz.stickytimelineview.TimeLineRecyclerView
+        android:id="@+id/horizontal_recycler_view2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:isSticky="true"
+        app:timeLineMode="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/guideline2" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
