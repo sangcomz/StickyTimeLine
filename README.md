@@ -8,8 +8,8 @@ StickyTimeLine is timeline view for android.
 - Add Horizontal Mode
 - Fix DEMO app
 - change attribute name
- - `timeLineCircleColor` -> `timeLineDotColor`
- - `timeLineCircleStrokeColor` -> `timeLineDotStrokeColor`
+  - `timeLineCircleColor` -> `timeLineDotColor`
+  - `timeLineCircleStrokeColor` -> `timeLineDotStrokeColor`
  
  ## Result Screen
  
