@@ -1,22 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="TimeLineRecyclerView">
-        <attr name="sectionBackgroundColor" format="color" />
-        <attr name="sectionTitleTextColor" format="color" />
-        <attr name="sectionSubTitleTextColor" format="color" />
-        <attr name="timeLineColor" format="color" />
-        <attr name="timeLineWidth" format="dimension" />
-
-        <attr name="timeLineCircleColor" format="color" />
-        <attr name="timeLineCircleStrokeColor" format="color" />
-
-        <attr name="sectionTitleTextSize" format="dimension" />
-        <attr name="sectionSubTitleTextSize" format="dimension" />
-        <attr name="isSticky" format="boolean" />
-        <attr name="customDotDrawable" format="reference" />
         <attr name="timeLineMode" format="enum">
             <enum name="vertical" value="0x00" />
             <enum name="horizontal" value="0x01" />
         </attr>
+
+        <attr name="isSticky" format="boolean" />
+
+        <attr name="sectionBackgroundColor" format="color" />
+        <attr name="sectionBackgroundColorMode" format="enum">
+            <enum name="full" value="0x00" />
+            <enum name="toTimeLine" value="0x01" />
+            <enum name="toDot" value="0x02" />
+        </attr>
+
+        <attr name="sectionTitleTextSize" format="dimension" />
+        <attr name="sectionSubTitleTextSize" format="dimension" />
+        <attr name="sectionTitleTextColor" format="color" />
+        <attr name="sectionSubTitleTextColor" format="color" />
+
+        <attr name="timeLineColor" format="color" />
+        <attr name="timeLineWidth" format="dimension" />
+
+        <attr name="timeLineDotColor" format="color" />
+        <attr name="timeLineDotStrokeColor" format="color" />
+        <attr name="customDotDrawable" format="reference" />
     </declare-styleable>
 </resources>

@@ -9,6 +9,8 @@ import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import xyz.sangcomz.stickytimelineview.TimeLineRecyclerView.Companion.MODE_TO_DOT
+import xyz.sangcomz.stickytimelineview.TimeLineRecyclerView.Companion.MODE_TO_TIME_LINE
 import xyz.sangcomz.stickytimelineview.callback.SectionCallback
 import xyz.sangcomz.stickytimelineview.ext.DP
 import xyz.sangcomz.stickytimelineview.model.RecyclerViewAttr
@@ -21,6 +23,17 @@ class HorizontalSectionItemDecoration(
 ) : RecyclerView.ItemDecoration() {
 
     private var defaultOffset: Int = 8.DP(context).toInt()
+
+    private val headerSectionBackgroundPaint = Paint().apply {
+        isAntiAlias = true
+        color = recyclerViewAttr.sectionBackgroundColor
+    }
+
+    private val linePaint = Paint().apply {
+        isAntiAlias = true
+        color = recyclerViewAttr.sectionLineColor
+        strokeWidth = recyclerViewAttr.sectionLineWidth
+    }
 
     private val headerTitlePaint = Paint().apply {
         isAntiAlias = true
@@ -59,10 +72,12 @@ class HorizontalSectionItemDecoration(
     }
 
 
-    override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
-        super.onDrawOver(c, parent, state)
+    override fun onDrawOver(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
+        super.onDrawOver(canvas, parent, state)
 
-        drawLine(c, parent)
+        drawBackground(canvas, parent)
+        drawLine(canvas, parent)
+
         var previousHeader: SectionInfo? = null
 
         if (recyclerViewAttr.isSticky) {
@@ -82,14 +97,14 @@ class HorizontalSectionItemDecoration(
                 val offset = currentHeaderWidth - ((nextHeaderView?.left ?: 0) - defaultOffset * 2)
 
                 drawHeader(
-                    c,
+                    canvas,
                     topChild,
                     topHeaderSectionInfo,
                     defaultLeftOffset - offset
                 )
             } else {
                 drawHeader(
-                    c,
+                    canvas,
                     topChild,
                     topHeaderSectionInfo,
                     defaultLeftOffset
@@ -104,7 +119,7 @@ class HorizontalSectionItemDecoration(
             sectionCallback.getSectionHeader(position)?.let { sectionInfo ->
                 if (previousHeader?.title != sectionInfo.title) {
                     if (getIsSection(position)) {
-                        drawHeader(c, child, sectionInfo)
+                        drawHeader(canvas, child, sectionInfo)
                     }
                     previousHeader = sectionInfo
                 }
@@ -115,16 +130,31 @@ class HorizontalSectionItemDecoration(
     /**
      * Draw a line in the timeline.
      */
-    private fun drawLine(c: Canvas, parent: RecyclerView) {
-        val paint = Paint().apply {
-            isAntiAlias = true
-            color = recyclerViewAttr.sectionLineColor
-            strokeWidth = recyclerViewAttr.sectionLineWidth
-        }
-
+    private fun drawLine(canvas: Canvas, parent: RecyclerView) {
         val yValue = getTopSpace() - (defaultOffset * 2) - (defaultOffset / 4)
 
-        c.drawLines(floatArrayOf(0f, yValue, parent.width.toFloat(), yValue), paint)
+        canvas.drawLines(floatArrayOf(0f, yValue, parent.width.toFloat(), yValue), linePaint)
+    }
+
+    private fun drawBackground(canvas: Canvas, parent: RecyclerView) {
+        var bottom = getTopSpace() - defaultOffset
+
+        when (recyclerViewAttr.sectionBackgroundColorMode) {
+            MODE_TO_DOT -> {
+                bottom -= (defaultOffset * 2 + defaultOffset / 2)
+            }
+            MODE_TO_TIME_LINE -> {
+                bottom -= if (recyclerViewAttr.sectionLineWidth > defaultOffset * 2 + defaultOffset / 2) {
+                    recyclerViewAttr.sectionLineWidth / 2
+                } else {
+                    (defaultOffset + defaultOffset / 4) - (recyclerViewAttr.sectionLineWidth / 2)
+                }
+            }
+        }
+
+        val rect = Rect(parent.left, 0, parent.width, bottom.toInt())
+
+        canvas.drawRect(rect, headerSectionBackgroundPaint)
     }
 
     /**
@@ -133,8 +163,8 @@ class HorizontalSectionItemDecoration(
     private fun getOvalDrawable(): Drawable {
         val strokeWidth = defaultOffset / 2
         val roundRadius = defaultOffset * 2
-        val strokeColor = recyclerViewAttr.sectionStrokeColor
-        val fillColor = recyclerViewAttr.sectionCircleColor
+        val strokeColor = recyclerViewAttr.sectionDotStrokeColor
+        val fillColor = recyclerViewAttr.sectionDotColor
 
         val gd = GradientDrawable()
         gd.setColor(fillColor)
@@ -230,6 +260,13 @@ class HorizontalSectionItemDecoration(
             .firstOrNull {
                 sectionCallback.getSectionHeader(parent.getChildAdapterPosition(it)) != currentTopSectionInfo
             }
+    }
+
+    private fun getDotRadius() = defaultOffset + defaultOffset / 4
+
+
+    private fun isLineBiggerThenDot(): Boolean {
+        return recyclerViewAttr.sectionLineWidth > (getDotRadius() * 2)
     }
 
     companion object {

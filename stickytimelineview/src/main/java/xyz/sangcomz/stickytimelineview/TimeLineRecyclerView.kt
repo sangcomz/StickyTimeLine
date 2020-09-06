@@ -33,6 +33,10 @@ class TimeLineRecyclerView(context: Context, attrs: AttributeSet?) : RecyclerVie
     companion object {
         private const val MODE_VERTICAL = 0x00
         private const val MODE_HORIZONTAL = 0x01
+
+        const val MODE_FULL = 0x00
+        const val MODE_TO_TIME_LINE = 0x01
+        const val MODE_TO_DOT = 0x02
     }
 
     init {
@@ -63,11 +67,11 @@ class TimeLineRecyclerView(context: Context, attrs: AttributeSet?) : RecyclerVie
                             ContextCompat.getColor(context, R.color.colorDefaultTitle)
                         ),
                         it.getColor(
-                            R.styleable.TimeLineRecyclerView_timeLineCircleColor,
+                            R.styleable.TimeLineRecyclerView_timeLineDotColor,
                             ContextCompat.getColor(context, R.color.colorDefaultTitle)
                         ),
                         it.getColor(
-                            R.styleable.TimeLineRecyclerView_timeLineCircleStrokeColor,
+                            R.styleable.TimeLineRecyclerView_timeLineDotStrokeColor,
                             ContextCompat.getColor(context, R.color.colorDefaultStroke)
                         ),
                         it.getDimension(
@@ -84,11 +88,15 @@ class TimeLineRecyclerView(context: Context, attrs: AttributeSet?) : RecyclerVie
                         ),
                         it.getBoolean(R.styleable.TimeLineRecyclerView_isSticky, true),
                         it.getDrawable(R.styleable.TimeLineRecyclerView_customDotDrawable),
-                        it.getInt(R.styleable.TimeLineRecyclerView_timeLineMode, MODE_VERTICAL)
+                        it.getInt(R.styleable.TimeLineRecyclerView_timeLineMode, MODE_VERTICAL),
+                        it.getInt(
+                            R.styleable.TimeLineRecyclerView_sectionBackgroundColorMode,
+                            MODE_FULL
+                        )
                     )
-
             }
 
+            a?.recycle()
         }
     }
 
@@ -101,7 +109,7 @@ class TimeLineRecyclerView(context: Context, attrs: AttributeSet?) : RecyclerVie
     fun addItemDecoration(callback: SectionCallback) {
         recyclerViewAttr?.let {
             val decoration: ItemDecoration =
-                when (it.mode) {
+                when (it.timeLineMode) {
                     MODE_VERTICAL -> {
                         VerticalSectionItemDecoration(
                             context,

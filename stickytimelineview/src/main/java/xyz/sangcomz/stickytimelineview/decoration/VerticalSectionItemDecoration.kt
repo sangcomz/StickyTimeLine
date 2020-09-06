@@ -224,8 +224,8 @@ class VerticalSectionItemDecoration(
     private fun getOvalDrawable(): Drawable {
         val strokeWidth = defaultOffset / 2
         val roundRadius = defaultOffset * 2
-        val strokeColor = recyclerViewAttr.sectionStrokeColor
-        val fillColor = recyclerViewAttr.sectionCircleColor
+        val strokeColor = recyclerViewAttr.sectionDotStrokeColor
+        val fillColor = recyclerViewAttr.sectionDotStrokeColor
 
         val gd = GradientDrawable()
         gd.setColor(fillColor)
