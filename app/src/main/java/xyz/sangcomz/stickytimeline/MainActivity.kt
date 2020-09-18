@@ -84,7 +84,7 @@ class MainActivity : AppCompatActivity() {
         )
 
         horizontal_recycler_view.addItemDecoration(getSectionCallback(singerList))
-        horizontal_recycler_view2.addItemDecoration(getSectionCallback(singerList))
+        horizontal_recycler_view2.addItemDecoration(getSectionCallbackWithDrawable(singerList))
     }
 
     //Get data method
@@ -93,6 +93,21 @@ class MainActivity : AppCompatActivity() {
 
     //Get SectionCallback method
     private fun getSectionCallback(singerList: List<Singer>): SectionCallback {
+        return object : SectionCallback {
+            //In your data, implement a method to determine if this is a section.
+            override fun isSection(position: Int): Boolean =
+                singerList[position].debuted != singerList[position - 1].debuted
+
+            //Implement a method that returns a SectionHeader.
+            override fun getSectionHeader(position: Int): SectionInfo? {
+                val singer = singerList[position]
+                return SectionInfo(singer.debuted, singer.group)
+            }
+
+        }
+    }
+
+    private fun getSectionCallbackWithDrawable(singerList: List<Singer>): SectionCallback {
         return object : SectionCallback {
             //In your data, implement a method to determine if this is a section.
             override fun isSection(position: Int): Boolean =

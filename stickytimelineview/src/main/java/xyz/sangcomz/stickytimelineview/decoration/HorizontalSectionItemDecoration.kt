@@ -15,6 +15,7 @@ import xyz.sangcomz.stickytimelineview.callback.SectionCallback
 import xyz.sangcomz.stickytimelineview.ext.DP
 import xyz.sangcomz.stickytimelineview.model.RecyclerViewAttr
 import xyz.sangcomz.stickytimelineview.model.SectionInfo
+import kotlin.math.roundToInt
 
 class HorizontalSectionItemDecoration(
     context: Context,
@@ -23,6 +24,8 @@ class HorizontalSectionItemDecoration(
 ) : RecyclerView.ItemDecoration() {
 
     private var defaultOffset: Int = 8.DP(context).toInt()
+    private var dotRadius: Int =
+        (recyclerViewAttr.sectionDotSize + recyclerViewAttr.sectionDotStrokeSize).roundToInt()
 
     private val headerSectionBackgroundPaint = Paint().apply {
         isAntiAlias = true
@@ -161,14 +164,14 @@ class HorizontalSectionItemDecoration(
      * Returns the oval dotDrawable of the timeline.
      */
     private fun getOvalDrawable(): Drawable {
-        val strokeWidth = defaultOffset / 2
-        val roundRadius = defaultOffset * 2
+        val strokeWidth = recyclerViewAttr.sectionDotStrokeSize.toInt()
         val strokeColor = recyclerViewAttr.sectionDotStrokeColor
         val fillColor = recyclerViewAttr.sectionDotColor
 
         val gd = GradientDrawable()
+        gd.shape = GradientDrawable.OVAL
         gd.setColor(fillColor)
-        gd.cornerRadius = roundRadius.toFloat()
+        gd.cornerRadius = dotRadius * 2f
         gd.setStroke(strokeWidth, strokeColor)
 
         return gd
@@ -192,8 +195,9 @@ class HorizontalSectionItemDecoration(
         canvas.save()
         canvas.translate(
             0f,
-            recyclerViewAttr.sectionTitleTextSize + recyclerViewAttr.sectionSubTitleTextSize + defaultOffset
+            getTopSpace() - (defaultOffset * 2) - (defaultOffset / 4) - dotRadius
         )
+        dotDrawable.setBounds(0, 0, dotRadius * 2, dotRadius * 2)
         dotDrawable.draw(canvas)
         canvas.restore()
     }

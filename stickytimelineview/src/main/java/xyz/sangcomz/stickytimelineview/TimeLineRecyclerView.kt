@@ -92,7 +92,15 @@ class TimeLineRecyclerView(context: Context, attrs: AttributeSet?) : RecyclerVie
                         it.getInt(
                             R.styleable.TimeLineRecyclerView_sectionBackgroundColorMode,
                             MODE_FULL
+                        ), it.getDimension(
+                            R.styleable.TimeLineRecyclerView_timeLineDotRadius,
+                            context.resources.getDimension(R.dimen.dot_radius)
+                        ),
+                        it.getDimension(
+                            R.styleable.TimeLineRecyclerView_timeLineDotStrokeSize,
+                            context.resources.getDimension(R.dimen.dot_stroke_width)
                         )
+
                     )
             }
 

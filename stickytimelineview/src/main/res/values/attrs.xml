@@ -25,6 +25,8 @@
 
         <attr name="timeLineDotColor" format="color" />
         <attr name="timeLineDotStrokeColor" format="color" />
+        <attr name="timeLineDotRadius" format="dimension" />
+        <attr name="timeLineDotStrokeSize" format="dimension" />
         <attr name="customDotDrawable" format="reference" />
     </declare-styleable>
 </resources>

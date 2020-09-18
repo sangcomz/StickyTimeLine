@@ -33,8 +33,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/vertical_text_view"
         app:timeLineColor="#2196F3"
+        app:timeLineDotColor="#2196F3"
+        app:timeLineDotRadius="4dp"
+        app:timeLineDotStrokeColor="#ffffff"
+        app:timeLineDotStrokeSize="2dp"
         app:timeLineMode="vertical"
-        app:timeLineWidth="2dp" />
+        app:timeLineWidth="4dp" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
@@ -81,17 +85,27 @@
         app:sectionSubTitleTextColor="#CDFFFFFF"
         app:sectionTitleTextColor="#ffffff"
         app:timeLineColor="#3F51B5"
-        app:timeLineMode="horizontal" />
+        app:timeLineDotColor="@color/colorPrimary"
+        app:timeLineDotRadius="4dp"
+        app:timeLineDotStrokeColor="#ffffff"
+        app:timeLineDotStrokeSize="2dp"
+        app:timeLineMode="horizontal"
+        app:timeLineWidth="0dp" />
 
     <xyz.sangcomz.stickytimelineview.TimeLineRecyclerView
         android:id="@+id/horizontal_recycler_view2"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:isSticky="true"
-        app:timeLineMode="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guideline2" />
+        app:layout_constraintTop_toBottomOf="@+id/guideline2"
+        app:timeLineDotColor="@color/colorPrimary"
+        app:timeLineDotRadius="6dp"
+        app:timeLineDotStrokeColor="#ffffff"
+        app:timeLineDotStrokeSize="4dp"
+        app:timeLineMode="horizontal"
+        app:timeLineWidth="4dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

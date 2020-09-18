@@ -4,23 +4,16 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
+import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
-import android.util.TypedValue
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
-import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.RecyclerView
-import xyz.sangcomz.stickytimelineview.R
 import xyz.sangcomz.stickytimelineview.callback.SectionCallback
 import xyz.sangcomz.stickytimelineview.ext.DP
 import xyz.sangcomz.stickytimelineview.model.RecyclerViewAttr
 import xyz.sangcomz.stickytimelineview.model.SectionInfo
-
-/*
- */
+import kotlin.math.roundToInt
 
 /**
  * Copyright 2017 Timothy Paetz
@@ -35,12 +28,35 @@ class VerticalSectionItemDecoration(
     private val recyclerViewAttr: RecyclerViewAttr
 ) : RecyclerView.ItemDecoration() {
 
-    private var headerView: View? = null
-    private var headerBackground: View? = null
-    private var headerTitle: TextView? = null
-    private var headerSubTitle: TextView? = null
-    private var dot: AppCompatImageView? = null
+    private val headerSectionBackgroundPaint = Paint().apply {
+        isAntiAlias = true
+        color = recyclerViewAttr.sectionBackgroundColor
+    }
+
+    private val linePaint = Paint().apply {
+        isAntiAlias = true
+        color = recyclerViewAttr.sectionLineColor
+        strokeWidth = recyclerViewAttr.sectionLineWidth
+    }
+
+    private val headerTitlePaint = Paint().apply {
+        isAntiAlias = true
+        textSize = recyclerViewAttr.sectionTitleTextSize
+        color = recyclerViewAttr.sectionTitleTextColor
+        typeface = Typeface.create(FONT_FAMILY, Typeface.BOLD)
+    }
+
+    private val headerSubTitlePaint = Paint().apply {
+        isAntiAlias = true
+        textSize = recyclerViewAttr.sectionSubTitleTextSize
+        color = recyclerViewAttr.sectionSubTitleTextColor
+        typeface = Typeface.create(FONT_FAMILY, Typeface.NORMAL)
+    }
+
     private var defaultOffset: Int = 8.DP(context).toInt()
+    private var sectionHeight: Int = 64.DP(context).toInt()
+    private var dotRadius: Int =
+        (recyclerViewAttr.sectionDotSize + recyclerViewAttr.sectionDotStrokeSize).roundToInt()
     private var headerOffset = defaultOffset * 8
 
 
@@ -94,8 +110,7 @@ class VerticalSectionItemDecoration(
             state
         )
         var previousHeader = SectionInfo("")
-        if (headerView == null) getHeaderView(parent)
-        drawLine(c, parent)
+        drawAllLine(c, parent)
 
         val childInContact = getChildInContact(parent, headerOffset * 2)
 
@@ -104,19 +119,16 @@ class VerticalSectionItemDecoration(
             if (getIsSection(contractPosition) && recyclerViewAttr.isSticky) {
                 val topChild = parent.getChildAt(0) ?: return
                 val topChildPosition = parent.getChildAdapterPosition(topChild)
-                headerView?.let {
-                    sectionCallback.getSectionHeader(topChildPosition)?.let { sectionInfo ->
-                        previousHeader = sectionInfo
-                        setHeaderView(sectionInfo)
-                        val offset =
-                            if (topChildPosition == 0
-                                && childInContact.top - (headerOffset * 2) == (-1 * headerOffset)
-                            ) 0f
-                            else
-                                (childInContact.top - (headerOffset * 2)).toFloat()
+                sectionCallback.getSectionHeader(topChildPosition)?.let { sectionInfo ->
+                    previousHeader = sectionInfo
+                    val offset =
+                        if (topChildPosition == 0
+                            && childInContact.top - (headerOffset * 2) == (-1 * headerOffset)
+                        ) 0f
+                        else
+                            (childInContact.top - (headerOffset * 2)).toFloat()
 
-                        moveHeader(c, it, offset)
-                    }
+                    drawHeader(c, it, sectionInfo, offset)
                 }
             }
         }
@@ -125,77 +137,32 @@ class VerticalSectionItemDecoration(
             val child = parent.getChildAt(i)
             val position = parent.getChildAdapterPosition(child)
             sectionCallback.getSectionHeader(position)?.let { sectionInfo ->
-                setHeaderView(sectionInfo)
                 if (previousHeader.title != sectionInfo.title) {
-                    headerView?.let {
-                        drawHeader(c, child, it)
-                        previousHeader = sectionInfo
-                    }
-
+                    drawHeader(c, child, sectionInfo)
+                    previousHeader = sectionInfo
                 }
             }
         }
-    }
-
-    /**
-     * First create a header view.
-     */
-    private fun getHeaderView(parent: RecyclerView) {
-        headerView = inflateHeaderView(parent)
-        headerView?.let { headerView ->
-            headerBackground = headerView.findViewById(R.id.lin_item_background)
-            headerTitle = headerView.findViewById(R.id.list_item_section_title)
-            headerSubTitle = headerView.findViewById(R.id.list_item_section_sub_title)
-            dot = headerView.findViewById(R.id.dot)
-            recyclerViewAttr.let { attrs ->
-                headerBackground?.apply {
-                    setBackgroundColor(attrs.sectionBackgroundColor)
-                }
-                headerTitle?.apply {
-                    setPadding(defaultOffset / 2, 0, defaultOffset / 2, 0)
-                    setTextColor(attrs.sectionTitleTextColor)
-                    setTextSize(TypedValue.COMPLEX_UNIT_PX, attrs.sectionTitleTextSize)
-                }
-                headerSubTitle?.apply {
-                    setPadding(defaultOffset / 2, 0, defaultOffset / 2, 0)
-                    setTextColor(attrs.sectionSubTitleTextColor)
-                    setTextSize(TypedValue.COMPLEX_UNIT_PX, attrs.sectionSubTitleTextSize)
-                }
-            }
-            fixLayoutSize(headerView, parent)
-        }
-    }
-
-    /**
-     * Set a header view for section info.
-     */
-    private fun setHeaderView(sectionInfo: SectionInfo) {
-        headerTitle?.text = sectionInfo.title
-        setHeaderSubTitle(sectionInfo.subTitle)
-        setDotDrawable(sectionInfo.dotDrawable)
-    }
-
-    private fun setHeaderSubTitle(sectionSubTitle: String?) {
-        headerSubTitle?.apply {
-            sectionSubTitle?.let {
-                visibility = View.VISIBLE
-                text = it
-            } ?: kotlin.run {
-                visibility = View.GONE
-            }
-        }
-
-    }
-
-    private fun setDotDrawable(sectionDotDrawable: Drawable?) {
-        val dotDrawable = sectionDotDrawable ?: recyclerViewAttr.customDotDrawable
-        dot?.background = dotDrawable ?: getOvalDrawable()
     }
 
     /**
      * Draw a line in the timeline.
      */
-    private fun drawLine(c: Canvas, parent: RecyclerView) {
+    private fun drawAllLine(c: Canvas, parent: RecyclerView) {
+        c.drawLines(
+            floatArrayOf(
+                defaultOffset * 3f,
+                0f,
+                defaultOffset * 3f,
+                parent.height.toFloat()
+            ), linePaint
+        )
+    }
+
+    /**
+     * Draw a line in the timeline.
+     */
+    private fun drawLine(c: Canvas) {
         val paint = Paint()
         paint.color = recyclerViewAttr.sectionLineColor
         paint.strokeWidth = recyclerViewAttr.sectionLineWidth
@@ -204,8 +171,8 @@ class VerticalSectionItemDecoration(
                 defaultOffset * 3f,
                 0f,
                 defaultOffset * 3f,
-                parent.height.toFloat()
-            ), paint
+                sectionHeight.toFloat()
+            ), linePaint
         )
     }
 
@@ -222,88 +189,76 @@ class VerticalSectionItemDecoration(
      * Returns the oval dotDrawable of the timeline.
      */
     private fun getOvalDrawable(): Drawable {
-        val strokeWidth = defaultOffset / 2
-        val roundRadius = defaultOffset * 2
+        val strokeWidth = recyclerViewAttr.sectionDotStrokeSize.toInt()
         val strokeColor = recyclerViewAttr.sectionDotStrokeColor
-        val fillColor = recyclerViewAttr.sectionDotStrokeColor
+        val fillColor = recyclerViewAttr.sectionDotColor
 
         val gd = GradientDrawable()
+        gd.shape = GradientDrawable.OVAL
         gd.setColor(fillColor)
-        gd.cornerRadius = roundRadius.toFloat()
+        gd.cornerRadius = dotRadius * 2.toFloat()
         gd.setStroke(strokeWidth, strokeColor)
 
         return gd
     }
 
     /**
-     * Moving parts when headers meet
-     */
-    private fun moveHeader(c: Canvas, topHeader: View, offset: Float) {
-        if (!recyclerViewAttr.isSticky) return
-        c.save()
-        c.translate(0f, offset)
-        topHeader.draw(c)
-        c.restore()
-    }
-
-    /**
      * Draw a header
      */
-    private fun drawHeader(c: Canvas, child: View, headerView: View) {
-        c.save()
+    private fun drawHeader(canvas: Canvas, child: View, sectionInfo: SectionInfo, offset: Float = 0f) {
+        canvas.save()
         if (recyclerViewAttr.isSticky) {
-            c.translate(0f, 0.coerceAtLeast(child.top - headerView.height).toFloat())
+            if (offset != 0f) {
+                canvas.translate(0f, offset)
+            } else {
+                canvas.translate(0f, 0.coerceAtLeast(child.top - sectionHeight).toFloat())
+            }
         } else {
-            c.translate(0f, (child.top - headerView.height).toFloat())
+            canvas.translate(0f, (child.top - sectionHeight).toFloat())
         }
-        headerView.draw(c)
-        c.restore()
+
+        drawBackground(canvas, child)
+        drawLine(canvas)
+        drawDotDrawable(canvas, sectionInfo)
+        drawHeaderTitle(canvas, sectionInfo)
+        drawHeaderSubTitle(canvas, sectionInfo)
+        canvas.restore()
     }
 
-    private fun inflateHeaderView(parent: RecyclerView): View {
-        return LayoutInflater.from(parent.context)
-            .inflate(
-                R.layout.recycler_section_header,
-                parent,
-                false
-            )
+    private fun drawBackground(canvas: Canvas, child: View) {
+        val rect = Rect(0, 0, child.right, sectionHeight)
+        canvas.drawRect(rect, headerSectionBackgroundPaint)
     }
 
-    /**
-     * Measures the headerTitle view to make sure its size is greater than 0 and will be drawn
-     * https://yoda.entelect.co.za/view/9627/how-to-android-recyclerview-item-decorations
-     */
-    private fun fixLayoutSize(view: View, parent: ViewGroup) {
-        val widthSpec = View.MeasureSpec.makeMeasureSpec(
-            parent.width,
-            View.MeasureSpec.EXACTLY
+    private fun drawDotDrawable(canvas: Canvas, sectionInfo: SectionInfo) {
+        val dotDrawable =
+            sectionInfo.dotDrawable ?: recyclerViewAttr.customDotDrawable ?: getOvalDrawable()
+        canvas.save()
+        canvas.translate(
+            (defaultOffset * 3f) - dotRadius,
+            (sectionHeight / 2).toFloat() - dotRadius
         )
-        val heightSpec = View.MeasureSpec.makeMeasureSpec(
-            parent.height,
-            View.MeasureSpec.UNSPECIFIED
-        )
+        dotDrawable.setBounds(0, 0, dotRadius * 2, dotRadius * 2)
+        dotDrawable.draw(canvas)
+        canvas.restore()
+    }
 
-        val childWidth = ViewGroup.getChildMeasureSpec(
-            widthSpec,
-            parent.paddingLeft + parent.paddingRight,
-            view.layoutParams.width
+    private fun drawHeaderTitle(canvas: Canvas, sectionInfo: SectionInfo) {
+        canvas.drawText(
+            sectionInfo.title,
+            (defaultOffset * 6).toFloat(),
+            (sectionHeight / 2) + (recyclerViewAttr.sectionTitleTextSize / 4),
+            headerTitlePaint
         )
-        val childHeight = ViewGroup.getChildMeasureSpec(
-            heightSpec,
-            parent.paddingTop + parent.paddingBottom,
-            view.layoutParams.height
-        )
+    }
 
-        view.measure(
-            childWidth,
-            childHeight
-        )
-
-        view.layout(
-            0,
-            0,
-            view.measuredWidth,
-            view.measuredHeight
+    private fun drawHeaderSubTitle(canvas: Canvas, sectionInfo: SectionInfo) {
+        val subTitle = sectionInfo.subTitle ?: return
+        canvas.drawText(
+            subTitle,
+            (defaultOffset * 6).toFloat(),
+            (sectionHeight / 2) + (recyclerViewAttr.sectionTitleTextSize) + (recyclerViewAttr.sectionSubTitleTextSize / 4),
+            headerSubTitlePaint
         )
     }
 
@@ -321,6 +276,10 @@ class VerticalSectionItemDecoration(
             sectionCallback.isSection(position)
         }
 
+    }
+
+    companion object {
+        private const val FONT_FAMILY = "sans-serif-light"
     }
 }
 

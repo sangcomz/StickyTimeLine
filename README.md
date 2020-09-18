@@ -4,12 +4,10 @@
 
 StickyTimeLine is timeline view for android.
 
-## What's New in 0.1.0? :tada:
-- Add Horizontal Mode
-- Fix DEMO app
-- change attribute name
-  - `timeLineCircleColor` -> `timeLineDotColor`
-  - `timeLineCircleStrokeColor` -> `timeLineDotStrokeColor`
+## What's New in 0.1.1? :tada:
+- Remove the way of using xml view of VerticalSectionItemDecoration
+- Add dot size attribute 
+  - `timeLineDotRadius`, `timeLineDotStrokeSize`
  
  ## Result Screen
  
@@ -29,7 +27,7 @@ StickyTimeLine is timeline view for android.
 
     dependencies {
         //StickyTimeLine v0.0.20 and above only supports projects that have been migrated to androidx.
-        compile 'com.github.sangcomz:StickyTimeLine:v0.1.0'
+        compile 'com.github.sangcomz:StickyTimeLine:v0.1.1'
     }
 ```
 ### Usage
@@ -213,6 +211,8 @@ public class JavaExampleActivity extends AppCompatActivity {
 |     isSticky             | To change Sticky functionality in the Timeline        |      true     |
 |    customDotDrawable     | To change the circle to custom drawable               |      null     |
 |sectionBackgroundColorMode| To change section background area(for horizontal mode)|    MODE_FULL  |
+|timeLineDotRadius         | To change dot radius                                  |      8dp      |
+|timeLineDotStrokeSize     | To change dot stroke size                             |      4dp      |
 
 # Contribute
 We welcome any contributions.
