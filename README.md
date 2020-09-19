@@ -199,17 +199,17 @@ public class JavaExampleActivity extends AppCompatActivity {
 
 |        Method Name       | Description                                           | Default Value |
 |:------------------------:|-------------------------------------------------------|:-------------:|
-|  sectionBackgroundColor  | To change section section background color            |    #f9f9f9    |
-|   sectionTitleTextColor  | To change section title color                         |    #414fca    |
-| sectionSubTitleTextColor | To change section sub title color                     |    #d16767    |
-|     timeLineColor        | To change line color in timeline                      |    #51ae45    |
-|    timeLineDotColor      | To change dot color in timeline                       |    #51ae45    |
-| timeLineCircleStrokeColor| To change dot stroke color in timeline                |    #f9f9f9    |
-|   sectionTitleTextSize   | To change section title text size                     |      14sp     |
-|  sectionSubTitleTextSize | To change section sub title text size                 |      12sp     |
-|     timeLineWidth        | To change line width in timeline                      |      4dp      |
-|     isSticky             | To change Sticky functionality in the Timeline        |      true     |
-|    customDotDrawable     | To change the circle to custom drawable               |      null     |
+|sectionBackgroundColor    | To change section section background color            |    #f9f9f9    |
+|sectionTitleTextColor     | To change section title color                         |    #414fca    |
+|sectionSubTitleTextColor  | To change section sub title color                     |    #d16767    |
+|timeLineColor             | To change line color in timeline                      |    #51ae45    |
+|timeLineDotColor          | To change dot color in timeline                       |    #51ae45    |
+|timeLineCircleStrokeColor | To change dot stroke color in timeline                |    #f9f9f9    |
+|sectionTitleTextSize      | To change section title text size                     |      14sp     |
+|sectionSubTitleTextSize   | To change section sub title text size                 |      12sp     |
+|timeLineWidth             | To change line width in timeline                      |      4dp      |
+|isSticky                  | To change Sticky functionality in the Timeline        |      true     |
+|customDotDrawable         | To change the circle to custom drawable               |      null     |
 |sectionBackgroundColorMode| To change section background area(for horizontal mode)|    MODE_FULL  |
 |timeLineDotRadius         | To change dot radius                                  |      8dp      |
 |timeLineDotStrokeSize     | To change dot stroke size                             |      4dp      |

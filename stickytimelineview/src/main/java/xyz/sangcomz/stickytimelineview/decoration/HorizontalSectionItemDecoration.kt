@@ -13,6 +13,7 @@ import xyz.sangcomz.stickytimelineview.TimeLineRecyclerView.Companion.MODE_TO_DO
 import xyz.sangcomz.stickytimelineview.TimeLineRecyclerView.Companion.MODE_TO_TIME_LINE
 import xyz.sangcomz.stickytimelineview.callback.SectionCallback
 import xyz.sangcomz.stickytimelineview.ext.DP
+import xyz.sangcomz.stickytimelineview.ext.shouldUseLayoutRtl
 import xyz.sangcomz.stickytimelineview.model.RecyclerViewAttr
 import xyz.sangcomz.stickytimelineview.model.SectionInfo
 import kotlin.math.roundToInt
@@ -23,7 +24,10 @@ class HorizontalSectionItemDecoration(
     private val recyclerViewAttr: RecyclerViewAttr
 ) : RecyclerView.ItemDecoration() {
 
-    private var defaultOffset: Int = 8.DP(context).toInt()
+    private val defaultOffset = 8.DP(context).toInt()
+    private val sideOffset = 8.DP(context).toInt()
+    private val bottomOffset = 4.DP(context).toInt()
+
     private var dotRadius: Int =
         (recyclerViewAttr.sectionDotSize + recyclerViewAttr.sectionDotStrokeSize).roundToInt()
 
@@ -66,10 +70,10 @@ class HorizontalSectionItemDecoration(
         )
         outRect.top = getTopSpace().toInt()
 
-        val leftMargin = defaultOffset
-        val rightMargin = defaultOffset
+        val leftMargin = sideOffset
+        val rightMargin = sideOffset
 
-        outRect.bottom = defaultOffset / 2
+        outRect.bottom = bottomOffset
         outRect.left = leftMargin
         outRect.right = rightMargin
     }
@@ -86,33 +90,23 @@ class HorizontalSectionItemDecoration(
         if (recyclerViewAttr.isSticky) {
             val topChild = parent.getChildAt(0)
             val topHeaderSectionInfo = getCurrentTopSectionInfo(parent) ?: return
-
-            val currentHeaderWidth = getCurrentHeaderViewWidth(parent)
+            val currentHeaderWidth = getHeaderViewWidth(topHeaderSectionInfo)
             val nextHeaderView = getNextHeaderView(parent)
 
-            val isContact =
-                nextHeaderView?.left in 0..currentHeaderWidth.toInt() + defaultOffset * 2
-            val defaultLeftOffset = -(topChild.left).toFloat() + defaultOffset
+            val isContact = isContact(currentHeaderWidth, nextHeaderView, parent)
+            val startOffset = getStartOffset(topChild, parent)
 
             previousHeader = topHeaderSectionInfo
 
-            if (isContact) {
-                val offset = currentHeaderWidth - ((nextHeaderView?.left ?: 0) - defaultOffset * 2)
+            val offset = getHeaderDrawOffset(currentHeaderWidth, nextHeaderView, parent)
 
-                drawHeader(
-                    canvas,
-                    topChild,
-                    topHeaderSectionInfo,
-                    defaultLeftOffset - offset
-                )
-            } else {
-                drawHeader(
-                    canvas,
-                    topChild,
-                    topHeaderSectionInfo,
-                    defaultLeftOffset
-                )
-            }
+            drawHeader(
+                canvas,
+                parent,
+                topChild,
+                topHeaderSectionInfo,
+                if (isContact) startOffset - offset else startOffset
+            )
         }
 
         for (i in 0 until parent.childCount) {
@@ -122,7 +116,7 @@ class HorizontalSectionItemDecoration(
             sectionCallback.getSectionHeader(position)?.let { sectionInfo ->
                 if (previousHeader?.title != sectionInfo.title) {
                     if (getIsSection(position)) {
-                        drawHeader(canvas, child, sectionInfo)
+                        drawHeader(canvas, parent, child, sectionInfo)
                     }
                     previousHeader = sectionInfo
                 }
@@ -140,7 +134,7 @@ class HorizontalSectionItemDecoration(
     }
 
     private fun drawBackground(canvas: Canvas, parent: RecyclerView) {
-        var bottom = getTopSpace() - defaultOffset
+        var bottom = getTopSpace() - sideOffset
 
         when (recyclerViewAttr.sectionBackgroundColorMode) {
             MODE_TO_DOT -> {
@@ -180,21 +174,30 @@ class HorizontalSectionItemDecoration(
     /**
      * Draw a header
      */
-    private fun drawHeader(c: Canvas, child: View, sectionInfo: SectionInfo, offset: Float = 0f) {
+    private fun drawHeader(
+        c: Canvas,
+        parent: RecyclerView,
+        child: View,
+        sectionInfo: SectionInfo,
+        offset: Float = 0f
+    ) {
         c.save()
-        c.translate((child.left).toFloat() + offset, 0f)
-        drawDotDrawable(c, sectionInfo)
-        drawHeaderTitle(c, sectionInfo)
-        drawHeaderSubTitle(c, sectionInfo)
+        c.translate(getHeaderTranslate(parent, child, offset), 0f)
+        drawDotDrawable(c, parent, sectionInfo)
+        drawHeaderTitle(c, parent, sectionInfo)
+        drawHeaderSubTitle(c, parent, sectionInfo)
         c.restore()
     }
 
-    private fun drawDotDrawable(canvas: Canvas, sectionInfo: SectionInfo) {
+    private fun drawDotDrawable(canvas: Canvas, parent: RecyclerView, sectionInfo: SectionInfo) {
+
+        val dx = getDotTranslate(parent, dotRadius)
+
         val dotDrawable =
             sectionInfo.dotDrawable ?: recyclerViewAttr.customDotDrawable ?: getOvalDrawable()
         canvas.save()
         canvas.translate(
-            0f,
+            dx,
             getTopSpace() - (defaultOffset * 2) - (defaultOffset / 4) - dotRadius
         )
         dotDrawable.setBounds(0, 0, dotRadius * 2, dotRadius * 2)
@@ -202,31 +205,36 @@ class HorizontalSectionItemDecoration(
         canvas.restore()
     }
 
-    private fun drawHeaderTitle(canvas: Canvas, sectionInfo: SectionInfo) {
+    private fun drawHeaderTitle(canvas: Canvas, parent: RecyclerView, sectionInfo: SectionInfo) {
+
+        val x = getTitleTranslate(parent, sectionInfo.title)
+
         val subTitleHeight =
             if (sectionInfo.subTitle.isNullOrEmpty()) recyclerViewAttr.sectionSubTitleTextSize else 0f
         canvas.drawText(
             sectionInfo.title,
-            0f,
-            recyclerViewAttr.sectionTitleTextSize - subTitleHeight, headerTitlePaint
+            x,
+            recyclerViewAttr.sectionTitleTextSize - subTitleHeight,
+            headerTitlePaint
         )
     }
 
-    private fun drawHeaderSubTitle(canvas: Canvas, sectionInfo: SectionInfo) {
+    private fun drawHeaderSubTitle(canvas: Canvas, parent: RecyclerView, sectionInfo: SectionInfo) {
         val subTitle = sectionInfo.subTitle ?: return
+
+        val x = getSubTitleTranslate(parent, sectionInfo.subTitle)
+
         canvas.drawText(
             subTitle,
-            0f,
+            x,
             recyclerViewAttr.sectionTitleTextSize + recyclerViewAttr.sectionSubTitleTextSize,
             headerSubTitlePaint
         )
     }
 
-    private fun getCurrentHeaderViewWidth(parent: RecyclerView): Float {
-        val prevHeaderSectionInfo = getCurrentTopSectionInfo(parent) ?: return 0f
-
-        val titleWidth = headerTitlePaint.measureText(prevHeaderSectionInfo.title)
-        val subTitleWidth = headerSubTitlePaint.measureText(prevHeaderSectionInfo.subTitle ?: "")
+    private fun getHeaderViewWidth(sectionInfo: SectionInfo): Float {
+        val titleWidth = headerTitlePaint.measureText(sectionInfo.title)
+        val subTitleWidth = headerSubTitlePaint.measureText(sectionInfo.subTitle ?: "")
         return titleWidth.coerceAtLeast(subTitleWidth)
     }
 
@@ -266,11 +274,69 @@ class HorizontalSectionItemDecoration(
             }
     }
 
-    private fun getDotRadius() = defaultOffset + defaultOffset / 4
+    private fun isContact(
+        currentHeaderWidth: Float,
+        nextHeaderView: View?,
+        parent: View
+    ): Boolean {
+        return if (parent.shouldUseLayoutRtl()) {
+            nextHeaderView?.right in parent.width - currentHeaderWidth.toInt() - defaultOffset * 2..parent.width
+        } else {
+            nextHeaderView?.left in 0..currentHeaderWidth.toInt() + defaultOffset * 2
+        }
+    }
 
+    private fun getStartOffset(topChild: View, parent: View): Float {
+        return if (parent.shouldUseLayoutRtl()) {
+            -(parent.width - topChild.right.toFloat() - sideOffset)
+        } else {
+            -(topChild.left).toFloat() + sideOffset
+        }
+    }
 
-    private fun isLineBiggerThenDot(): Boolean {
-        return recyclerViewAttr.sectionLineWidth > (getDotRadius() * 2)
+    private fun getHeaderDrawOffset(
+        currentHeaderWidth: Float,
+        nextHeaderView: View?,
+        parent: View
+    ): Float {
+        return if (parent.shouldUseLayoutRtl()) {
+            currentHeaderWidth - ((parent.width - (nextHeaderView?.right
+                ?: 0)) - defaultOffset * 2)
+        } else {
+            currentHeaderWidth - ((nextHeaderView?.left ?: 0) - defaultOffset * 2)
+        }
+    }
+
+    private fun getHeaderTranslate(parent: View, child: View, offset: Float): Float {
+        return if (parent.shouldUseLayoutRtl()) {
+            child.right.toFloat() - offset - sideOffset
+        } else {
+            child.left.toFloat() + offset
+        }
+    }
+
+    private fun getDotTranslate(parent: View, radius: Int): Float {
+        return if (parent.shouldUseLayoutRtl()) {
+            (-radius).toFloat()
+        } else {
+            0f
+        }
+    }
+
+    private fun getTitleTranslate(parent: View, title: String): Float {
+        return if (parent.shouldUseLayoutRtl()) {
+            -headerTitlePaint.measureText(title) + defaultOffset
+        } else {
+            0f
+        }
+    }
+
+    private fun getSubTitleTranslate(parent: View, subtitle: String): Float {
+        return if (parent.shouldUseLayoutRtl()) {
+            -headerSubTitlePaint.measureText(subtitle) + defaultOffset
+        } else {
+            0f
+        }
     }
 
     companion object {

@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import xyz.sangcomz.stickytimelineview.callback.SectionCallback
 import xyz.sangcomz.stickytimelineview.decoration.HorizontalSectionItemDecoration
 import xyz.sangcomz.stickytimelineview.decoration.VerticalSectionItemDecoration
+import xyz.sangcomz.stickytimelineview.ext.shouldUseLayoutRtl
 import xyz.sangcomz.stickytimelineview.model.RecyclerViewAttr
 
 

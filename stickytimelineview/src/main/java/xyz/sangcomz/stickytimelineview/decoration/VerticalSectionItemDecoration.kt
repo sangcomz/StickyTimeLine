@@ -11,6 +11,7 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import xyz.sangcomz.stickytimelineview.callback.SectionCallback
 import xyz.sangcomz.stickytimelineview.ext.DP
+import xyz.sangcomz.stickytimelineview.ext.shouldUseLayoutRtl
 import xyz.sangcomz.stickytimelineview.model.RecyclerViewAttr
 import xyz.sangcomz.stickytimelineview.model.SectionInfo
 import kotlin.math.roundToInt
@@ -85,8 +86,10 @@ class VerticalSectionItemDecoration(
             outRect.top = defaultOffset / 2
         }
 
-        val leftMargin = defaultOffset * 6
-        val rightMargin = defaultOffset * 2
+        val isLayoutRtl = parent.shouldUseLayoutRtl()
+
+        val leftMargin = if (isLayoutRtl) defaultOffset * 2 else defaultOffset * 6
+        val rightMargin = if (isLayoutRtl) defaultOffset * 6 else defaultOffset * 2
 
         outRect.bottom = defaultOffset / 2
         outRect.left = leftMargin
@@ -128,7 +131,7 @@ class VerticalSectionItemDecoration(
                         else
                             (childInContact.top - (headerOffset * 2)).toFloat()
 
-                    drawHeader(c, it, sectionInfo, offset)
+                    drawHeader(c, parent, it, sectionInfo, offset)
                 }
             }
         }
@@ -138,7 +141,7 @@ class VerticalSectionItemDecoration(
             val position = parent.getChildAdapterPosition(child)
             sectionCallback.getSectionHeader(position)?.let { sectionInfo ->
                 if (previousHeader.title != sectionInfo.title) {
-                    drawHeader(c, child, sectionInfo)
+                    drawHeader(c, parent, child, sectionInfo)
                     previousHeader = sectionInfo
                 }
             }
@@ -149,11 +152,13 @@ class VerticalSectionItemDecoration(
      * Draw a line in the timeline.
      */
     private fun drawAllLine(c: Canvas, parent: RecyclerView) {
+        val offset = getLineOffset(parent)
+
         c.drawLines(
             floatArrayOf(
-                defaultOffset * 3f,
+                offset,
                 0f,
-                defaultOffset * 3f,
+                offset,
                 parent.height.toFloat()
             ), linePaint
         )
@@ -162,15 +167,14 @@ class VerticalSectionItemDecoration(
     /**
      * Draw a line in the timeline.
      */
-    private fun drawLine(c: Canvas) {
-        val paint = Paint()
-        paint.color = recyclerViewAttr.sectionLineColor
-        paint.strokeWidth = recyclerViewAttr.sectionLineWidth
+    private fun drawLine(c: Canvas, parent: RecyclerView) {
+        val offset = getLineOffset(parent)
+
         c.drawLines(
             floatArrayOf(
-                defaultOffset * 3f,
+                offset,
                 0f,
-                defaultOffset * 3f,
+                offset,
                 sectionHeight.toFloat()
             ), linePaint
         )
@@ -205,7 +209,13 @@ class VerticalSectionItemDecoration(
     /**
      * Draw a header
      */
-    private fun drawHeader(canvas: Canvas, child: View, sectionInfo: SectionInfo, offset: Float = 0f) {
+    private fun drawHeader(
+        canvas: Canvas,
+        parent: RecyclerView,
+        child: View,
+        sectionInfo: SectionInfo,
+        offset: Float = 0f
+    ) {
         canvas.save()
         if (recyclerViewAttr.isSticky) {
             if (offset != 0f) {
@@ -217,25 +227,25 @@ class VerticalSectionItemDecoration(
             canvas.translate(0f, (child.top - sectionHeight).toFloat())
         }
 
-        drawBackground(canvas, child)
-        drawLine(canvas)
-        drawDotDrawable(canvas, sectionInfo)
-        drawHeaderTitle(canvas, sectionInfo)
-        drawHeaderSubTitle(canvas, sectionInfo)
+        drawBackground(canvas, parent)
+        drawLine(canvas, parent)
+        drawDotDrawable(canvas, parent, sectionInfo)
+        drawHeaderTitle(canvas, parent, sectionInfo)
+        drawHeaderSubTitle(canvas, parent, sectionInfo)
         canvas.restore()
     }
 
-    private fun drawBackground(canvas: Canvas, child: View) {
-        val rect = Rect(0, 0, child.right, sectionHeight)
+    private fun drawBackground(canvas: Canvas, parent: RecyclerView) {
+        val rect = Rect(0, 0, parent.width, sectionHeight)
         canvas.drawRect(rect, headerSectionBackgroundPaint)
     }
 
-    private fun drawDotDrawable(canvas: Canvas, sectionInfo: SectionInfo) {
+    private fun drawDotDrawable(canvas: Canvas, parent: RecyclerView, sectionInfo: SectionInfo) {
         val dotDrawable =
             sectionInfo.dotDrawable ?: recyclerViewAttr.customDotDrawable ?: getOvalDrawable()
         canvas.save()
         canvas.translate(
-            (defaultOffset * 3f) - dotRadius,
+            getDotTranslateX(parent, dotRadius),
             (sectionHeight / 2).toFloat() - dotRadius
         )
         dotDrawable.setBounds(0, 0, dotRadius * 2, dotRadius * 2)
@@ -243,20 +253,21 @@ class VerticalSectionItemDecoration(
         canvas.restore()
     }
 
-    private fun drawHeaderTitle(canvas: Canvas, sectionInfo: SectionInfo) {
+    private fun drawHeaderTitle(canvas: Canvas, parent: RecyclerView, sectionInfo: SectionInfo) {
         canvas.drawText(
             sectionInfo.title,
-            (defaultOffset * 6).toFloat(),
+            getTitleTranslateX(parent, sectionInfo.title),
             (sectionHeight / 2) + (recyclerViewAttr.sectionTitleTextSize / 4),
             headerTitlePaint
         )
     }
 
-    private fun drawHeaderSubTitle(canvas: Canvas, sectionInfo: SectionInfo) {
+    private fun drawHeaderSubTitle(canvas: Canvas, parent: RecyclerView, sectionInfo: SectionInfo) {
         val subTitle = sectionInfo.subTitle ?: return
+
         canvas.drawText(
             subTitle,
-            (defaultOffset * 6).toFloat(),
+            getSubTitleTranslateX(parent, sectionInfo.subTitle),
             (sectionHeight / 2) + (recyclerViewAttr.sectionTitleTextSize) + (recyclerViewAttr.sectionSubTitleTextSize / 4),
             headerSubTitlePaint
         )
@@ -276,6 +287,38 @@ class VerticalSectionItemDecoration(
             sectionCallback.isSection(position)
         }
 
+    }
+
+    private fun getLineOffset(parent: View): Float {
+        return if (parent.shouldUseLayoutRtl()) {
+            parent.width - defaultOffset * 3f
+        } else {
+            defaultOffset * 3f
+        }
+    }
+
+    private fun getDotTranslateX(parent: View, radius: Int): Float {
+        return if (parent.shouldUseLayoutRtl()) {
+            parent.width - ((defaultOffset * 3f) + radius)
+        } else {
+            (defaultOffset * 3f) - radius
+        }
+    }
+
+    private fun getTitleTranslateX(parent: View, title: String): Float {
+        return if (parent.shouldUseLayoutRtl()) {
+            parent.width - (defaultOffset * 6).toFloat() - headerTitlePaint.measureText(title)
+        } else {
+            (defaultOffset * 6).toFloat()
+        }
+    }
+
+    private fun getSubTitleTranslateX(parent: View, subtitle: String): Float {
+        return if (parent.shouldUseLayoutRtl()) {
+            parent.width - (defaultOffset * 6).toFloat() - headerSubTitlePaint.measureText(subtitle)
+        } else {
+            (defaultOffset * 6).toFloat()
+        }
     }
 
     companion object {
