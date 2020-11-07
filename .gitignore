@@ -9,7 +9,4 @@
 .externalNativeBuild
 /release
 .idea/*
-/.vs/slnx.sqlite
-/.vs/ProjectSettings.json
-/.vs/VSWorkspaceState.json
-/.vs/StickyTimeLine/v16/.suo
+/.vs
