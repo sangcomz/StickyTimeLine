@@ -13,9 +13,9 @@ StickyTimeLine is timeline view for android.
  
  Feel free to send me a pull request with your app and I'll link you here:
  
- | Sample <p style="float:left;"> <a href="https://play.google.com/store/apps/details?id=xyz.sangcomz.stickytimeline"> <img HEIGHT="40" WIDTH="135" alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/apps/en-play-badge.png" /></a></p> | AlleysMap <p style="float:left;"> <a href="https://play.google.com/store/apps/details?id=co.alleys.android"> <img HEIGHT="40" WIDTH="135" alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/apps/en-play-badge.png" /></a></p>   |
- |:---------------------------------:|:--------------------------------:|
- | <img src="/pic/sample_result.gif">|<img src="/pic/alleys_result.gif">|
+ | Sample <p style="float:left;">  <a href="https://play.google.com/store/apps/details?id=xyz.sangcomz.stickytimeline">  <img HEIGHT="40" WIDTH="135" alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/apps/en-play-badge.png" /></a></p>   | AlleysMap <p style="float:left;"> <a href="https://play.google.com/store/apps/details?id=co.alleys.android"> <img HEIGHT="40" WIDTH="135" alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/apps/en-play-badge.png" /> </a></p> | StockRoom <p style="float:left;"> <a href="https://play.google.com/store/apps/details?id=com.thecloudsite.stockroom"> <img HEIGHT="40" WIDTH="135" alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/apps/en-play-badge.png" /></a></p>   |
+ |:---------------------------------:|:--------------------------------:|:--------------------------------:|
+ | <img src="/pic/sample_result.gif">|<img src="/pic/alleys_result.gif">|<img width="auto" height="500px" src="/pic/stockroom_result.gif">|
 
 ## How to Use
 
