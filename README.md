@@ -4,20 +4,19 @@
 
 StickyTimeLine is timeline view for android.
 
-## What's New in 0.1.0? :tada:
-- Add Horizontal Mode
-- Fix DEMO app
-- change attribute name
-  - `timeLineCircleColor` -> `timeLineDotColor`
-  - `timeLineCircleStrokeColor` -> `timeLineDotStrokeColor`
- 
+## What's New in 0.1.1? :tada:
+- Remove the way of using xml view of VerticalSectionItemDecoration
+- Add dot size attribute 
+  - `timeLineDotRadius`, `timeLineDotStrokeSize`
+- Support RTL (#26)
+
  ## Result Screen
  
  Feel free to send me a pull request with your app and I'll link you here:
  
- | Sample <p style="float:left;"> <a href="https://play.google.com/store/apps/details?id=xyz.sangcomz.stickytimeline"> <img HEIGHT="40" WIDTH="135" alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/apps/en-play-badge.png" /></a></p> | AlleysMap <p style="float:left;"> <a href="https://play.google.com/store/apps/details?id=co.alleys.android"> <img HEIGHT="40" WIDTH="135" alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/apps/en-play-badge.png" /></a></p>   |
- |:---------------------------------:|:--------------------------------:|
- | <img src="/pic/sample_result.gif">|<img src="/pic/alleys_result.gif">|
+ | Sample <p style="float:left;">  <a href="https://play.google.com/store/apps/details?id=xyz.sangcomz.stickytimeline">  <img HEIGHT="40" WIDTH="135" alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/apps/en-play-badge.png" /></a></p>   | AlleysMap <p style="float:left;"> <a href="https://play.google.com/store/apps/details?id=co.alleys.android"> <img HEIGHT="40" WIDTH="135" alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/apps/en-play-badge.png" /> </a></p> | StockRoom <p style="float:left;"> <a href="https://play.google.com/store/apps/details?id=com.thecloudsite.stockroom"> <img HEIGHT="40" WIDTH="135" alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/apps/en-play-badge.png" /></a></p>   |
+ |:---------------------------------:|:--------------------------------:|:--------------------------------:|
+ | <img src="/pic/sample_result.gif">|<img src="/pic/alleys_result.gif">|<img width="auto" height="500px" src="/pic/stockroom_result.gif">|
 
 ## How to Use
 
@@ -29,7 +28,7 @@ StickyTimeLine is timeline view for android.
 
     dependencies {
         //StickyTimeLine v0.0.20 and above only supports projects that have been migrated to androidx.
-        compile 'com.github.sangcomz:StickyTimeLine:v0.1.0'
+        compile 'com.github.sangcomz:StickyTimeLine:v0.1.1'
     }
 ```
 ### Usage
@@ -201,18 +200,20 @@ public class JavaExampleActivity extends AppCompatActivity {
 
 |        Method Name       | Description                                           | Default Value |
 |:------------------------:|-------------------------------------------------------|:-------------:|
-|  sectionBackgroundColor  | To change section section background color            |    #f9f9f9    |
-|   sectionTitleTextColor  | To change section title color                         |    #414fca    |
-| sectionSubTitleTextColor | To change section sub title color                     |    #d16767    |
-|     timeLineColor        | To change line color in timeline                      |    #51ae45    |
-|    timeLineDotColor      | To change dot color in timeline                       |    #51ae45    |
-| timeLineCircleStrokeColor| To change dot stroke color in timeline                |    #f9f9f9    |
-|   sectionTitleTextSize   | To change section title text size                     |      14sp     |
-|  sectionSubTitleTextSize | To change section sub title text size                 |      12sp     |
-|     timeLineWidth        | To change line width in timeline                      |      4dp      |
-|     isSticky             | To change Sticky functionality in the Timeline        |      true     |
-|    customDotDrawable     | To change the circle to custom drawable               |      null     |
+|sectionBackgroundColor    | To change section section background color            |    #f9f9f9    |
+|sectionTitleTextColor     | To change section title color                         |    #414fca    |
+|sectionSubTitleTextColor  | To change section sub title color                     |    #d16767    |
+|timeLineColor             | To change line color in timeline                      |    #51ae45    |
+|timeLineDotColor          | To change dot color in timeline                       |    #51ae45    |
+|timeLineCircleStrokeColor | To change dot stroke color in timeline                |    #f9f9f9    |
+|sectionTitleTextSize      | To change section title text size                     |      14sp     |
+|sectionSubTitleTextSize   | To change section sub title text size                 |      12sp     |
+|timeLineWidth             | To change line width in timeline                      |      4dp      |
+|isSticky                  | To change Sticky functionality in the Timeline        |      true     |
+|customDotDrawable         | To change the circle to custom drawable               |      null     |
 |sectionBackgroundColorMode| To change section background area(for horizontal mode)|    MODE_FULL  |
+|timeLineDotRadius         | To change dot radius                                  |      8dp      |
+|timeLineDotStrokeSize     | To change dot stroke size                             |      4dp      |
 
 # Contribute
 We welcome any contributions.

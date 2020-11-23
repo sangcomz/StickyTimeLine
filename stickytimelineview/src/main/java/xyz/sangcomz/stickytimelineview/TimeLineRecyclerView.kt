@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import xyz.sangcomz.stickytimelineview.callback.SectionCallback
 import xyz.sangcomz.stickytimelineview.decoration.HorizontalSectionItemDecoration
 import xyz.sangcomz.stickytimelineview.decoration.VerticalSectionItemDecoration
+import xyz.sangcomz.stickytimelineview.ext.shouldUseLayoutRtl
 import xyz.sangcomz.stickytimelineview.model.RecyclerViewAttr
 
 
@@ -92,7 +93,15 @@ class TimeLineRecyclerView(context: Context, attrs: AttributeSet?) : RecyclerVie
                         it.getInt(
                             R.styleable.TimeLineRecyclerView_sectionBackgroundColorMode,
                             MODE_FULL
+                        ), it.getDimension(
+                            R.styleable.TimeLineRecyclerView_timeLineDotRadius,
+                            context.resources.getDimension(R.dimen.dot_radius)
+                        ),
+                        it.getDimension(
+                            R.styleable.TimeLineRecyclerView_timeLineDotStrokeSize,
+                            context.resources.getDimension(R.dimen.dot_stroke_width)
                         )
+
                     )
             }
 

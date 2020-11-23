@@ -9,4 +9,6 @@
     <dimen name="title_text_size">14sp</dimen>
     <dimen name="sub_title_text_size">12sp</dimen>
     <dimen name="line_width">4dp</dimen>
+    <dimen name="dot_radius">8dp</dimen>
+    <dimen name="dot_stroke_width">4dp</dimen>
 </resources>
