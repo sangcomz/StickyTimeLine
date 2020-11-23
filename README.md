@@ -8,7 +8,8 @@ StickyTimeLine is timeline view for android.
 - Remove the way of using xml view of VerticalSectionItemDecoration
 - Add dot size attribute 
   - `timeLineDotRadius`, `timeLineDotStrokeSize`
- 
+- Support RTL (#26)
+
  ## Result Screen
  
  Feel free to send me a pull request with your app and I'll link you here:
