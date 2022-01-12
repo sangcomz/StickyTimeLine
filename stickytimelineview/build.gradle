@@ -1,9 +1,5 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'maven-publish'
-
-group = 'com.github.sangcomz'
-version = 'v' + gradle.versionName
 
 repositories {
     mavenCentral()
@@ -26,6 +22,8 @@ android {
 
 }
 
+apply from: '../gradle/release.gradle'
+
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -36,5 +34,8 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test:runner:1.4.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+}
 
+tasks.withType(Javadoc).all {
+    enabled = false
 }
