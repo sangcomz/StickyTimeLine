@@ -1,0 +1,130 @@
+apply plugin: "maven-publish"
+apply plugin: "signing"
+apply plugin: "io.github.sabujak-sabujak"
+
+if (project.rootProject.file('local.properties').isFile()) {
+    Properties props = new Properties()
+    props.load(new FileInputStream(rootProject.file("local.properties")))
+    project.ext {
+        setProperty("ossrhUsername", props["ossrhUsername"] ?: ' ')
+        setProperty("ossrhPassword", props["ossrhPassword"] ?: ' ')
+        setProperty("signingKeyId", props["signing.keyId"] ?: ' ')
+        setProperty("signingPassword", props["signing.password"] ?: ' ')
+        setProperty("signingKey", props["signing.key"] ?: ' ')
+        setProperty("githubAccessTokens", props["github_access_tokens"] ?: ' ')
+    }
+} else {
+    project.ext {
+        setProperty("ossrhUsername", ' ')
+        setProperty("ossrhPassword", ' ')
+        setProperty("signingKeyId", ' ')
+        setProperty("signingPassword", ' ')
+        setProperty("signingKey", ' ')
+        setProperty("githubAccessTokens", ' ')
+    }
+}
+
+group = "io.github.sangcomz"
+version = gradle.versionName
+archivesBaseName = "StickyTimeLine"
+
+def siteUrl = 'https://github.com/sangcomz/StickyTimeLine'      // Homepage URL of the library
+def gitUrl = 'https://github.com/sangcomz/StickyTimeLine.git'   // Git repository URL
+
+afterEvaluate {
+
+    task sourceJar(type: Jar) {
+        from android.sourceSets.main.java.srcDirs
+        archiveClassifier.set("sources")
+    }
+
+    task javadoc(type: Javadoc) {
+        source = android.sourceSets.main.java.srcDirs
+        classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    }
+
+    task javadocJar(type: Jar, dependsOn: javadoc) {
+        archiveClassifier.set("javadoc")
+        from javadoc.destinationDir
+    }
+
+    // https://docs.gradle.org/current/userguide/publishing_maven.html
+    publishing {
+        publications {
+            // Creates a Maven publication called "release".
+            release(MavenPublication) {
+                groupId group
+                artifactId archivesBaseName
+                version version
+
+                if (project.plugins.findPlugin("com.android.library")) {
+                    from components.release
+                } else {
+                    from components.java
+                }
+                artifact sourceJar
+                artifact javadocJar
+
+                pom {
+                    name = archivesBaseName
+                    description = 'StickyTimeLine is timeline view for android.'
+                    url = siteUrl
+                    licenses {
+                        license {
+                            name = 'The Apache License, Version 2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = 'sangcomz'
+                            name = 'Swokwon Jeong'
+                            email = 'dev.seokwon2@gmail.com'
+                        }
+                    }
+                    scm {
+                        url = gitUrl
+                    }
+                }
+            }
+        }
+
+        repositories {
+            maven {
+                if (version.endsWith("-SNAPSHOT")) {
+                    url = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+                } else {
+                    url = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+                }
+                credentials {
+                    username ossrhUsername
+                    password ossrhPassword
+                }
+            }
+        }
+    }
+
+    signing {
+        useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
+        sign publishing.publications.release
+    }
+
+    javadoc {
+        if (JavaVersion.current().isJava9Compatible()) {
+            options.addBooleanOption('html5', true)
+        }
+    }
+}
+
+githubRelease {
+    owner = 'sangcomz'
+    repo = 'StickyTimeLine'
+    token = githubAccessTokens
+    tagName = version
+    targetCommitish = 'master'
+    body = """## Release Note
+* [Improvement] Move to MavenCentral
+* [Improvement] lib version update
+"""
+    name = version
+}
