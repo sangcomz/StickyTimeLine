@@ -4,11 +4,9 @@
 
 StickyTimeLine is timeline view for android.
 
-## What's New in 0.1.1? :tada:
-- Remove the way of using xml view of VerticalSectionItemDecoration
-- Add dot size attribute 
-  - `timeLineDotRadius`, `timeLineDotStrokeSize`
-- Support RTL (#26)
+## What's New? :tada:
+- [Improvement] Move to MavenCentral
+- [Improvement] lib version update
 
  ## Result Screen
  
@@ -21,14 +19,10 @@ StickyTimeLine is timeline view for android.
 ## How to Use
 
 ### Gradle
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.sangcomz/stickytimeline)](https://search.maven.org/artifact/io.github.sangcomz/stickytimeline)
 ```groovy
-    repositories {
-        maven { url 'https://jitpack.io' }
-    }
-
     dependencies {
-        //StickyTimeLine v0.0.20 and above only supports projects that have been migrated to androidx.
-        compile 'com.github.sangcomz:StickyTimeLine:v0.1.1'
+        implementation 'io.github.sangcomz:StickyTimeLine:x.x.x'
     }
 ```
 ### Usage
