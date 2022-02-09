@@ -19,7 +19,7 @@ StickyTimeLine is timeline view for android.
 ## How to Use
 
 ### Gradle
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.sangcomz/stickytimeline)](https://search.maven.org/artifact/io.github.sangcomz/stickytimeline)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.sangcomz/StickyTimeLine)](https://search.maven.org/artifact/io.github.sangcomz/StickyTimeLine)
 ```groovy
     dependencies {
         implementation 'io.github.sangcomz:StickyTimeLine:x.x.x'
