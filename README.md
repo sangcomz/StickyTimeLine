@@ -1,6 +1,6 @@
 # StickyTimeLine
 
-[![](https://jitpack.io/v/sangcomz/StickyTimeLine.svg)](https://jitpack.io/#sangcomz/StickyTimeLine)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.sangcomz/StickyTimeLine)](https://search.maven.org/artifact/io.github.sangcomz/StickyTimeLine)
 
 StickyTimeLine is timeline view for android.
 
