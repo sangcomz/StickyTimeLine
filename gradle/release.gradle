@@ -122,7 +122,6 @@ githubRelease {
     tagName = version
     targetCommitish = 'master'
     body = """## Release Note
-* [Improvement] Move to MavenCentral
 * [Improvement] lib version update
 """
     name = version
