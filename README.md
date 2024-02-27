@@ -5,7 +5,6 @@
 StickyTimeLine is timeline view for android.
 
 ## What's New? :tada:
-- [Improvement] Move to MavenCentral
 - [Improvement] lib version update
 
  ## Result Screen
