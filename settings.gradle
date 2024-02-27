@@ -1,8 +1,8 @@
 include ':app', ':stickytimelineview'
 
-gradle.ext.set('versionCode', 10)
-gradle.ext.set('versionName', '1.0.0')
+gradle.ext.set('versionCode', 11)
+gradle.ext.set('versionName', '1.1.0')
 
-gradle.ext.set('minSdk', 16)
-gradle.ext.set('targetSdk', 31)
-gradle.ext.set('compileSdk', 31)
+gradle.ext.set('minSdk', 21)
+gradle.ext.set('targetSdk', 34)
+gradle.ext.set('compileSdk', 34)

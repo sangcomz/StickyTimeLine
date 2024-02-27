@@ -32,7 +32,6 @@ def siteUrl = 'https://github.com/sangcomz/StickyTimeLine'      // Homepage URL 
 def gitUrl = 'https://github.com/sangcomz/StickyTimeLine.git'   // Git repository URL
 
 afterEvaluate {
-
     task sourceJar(type: Jar) {
         from android.sourceSets.main.java.srcDirs
         archiveClassifier.set("sources")
@@ -53,6 +52,7 @@ afterEvaluate {
         publications {
             // Creates a Maven publication called "release".
             release(MavenPublication) {
+                tasks.named("generateMetadataFileForReleasePublication").configure { dependsOn("sourceJar") }
                 groupId group
                 artifactId archivesBaseName
                 version version
@@ -62,7 +62,6 @@ afterEvaluate {
                 } else {
                     from components.java
                 }
-                artifact sourceJar
                 artifact javadocJar
 
                 pom {
@@ -78,7 +77,7 @@ afterEvaluate {
                     developers {
                         developer {
                             id = 'sangcomz'
-                            name = 'Swokwon Jeong'
+                            name = 'Seokwon Jeong'
                             email = 'dev.seokwon2@gmail.com'
                         }
                     }
@@ -123,7 +122,6 @@ githubRelease {
     tagName = version
     targetCommitish = 'master'
     body = """## Release Note
-* [Improvement] Move to MavenCentral
 * [Improvement] lib version update
 """
     name = version
