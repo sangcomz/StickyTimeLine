@@ -6,3 +6,5 @@ gradle.ext.set('versionName', '1.1.0')
 gradle.ext.set('minSdk', 21)
 gradle.ext.set('targetSdk', 34)
 gradle.ext.set('compileSdk', 34)
+include ':stickytimelineview-compose'
+include ':sample-compose'
