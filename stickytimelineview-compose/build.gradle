@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace 'xyz.sangcomz.github.stickytimelineview.compose'
+    namespace 'io.github.sangcomz.stickytimelineview.compose'
     compileSdk gradle.compileSdk
 
     defaultConfig {

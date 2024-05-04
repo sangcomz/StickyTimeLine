@@ -1,4 +1,4 @@
-package xyz.sangcomz.github.sample.compose
+package io.github.sangcomz.stickytimeline.compose
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -6,12 +6,11 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import xyz.sangcomz.github.sample.compose.ui.theme.StickyTimeLineTheme
-import xyz.sangcomz.github.stickytimelineview.compose.StickyTimeLineView
+import io.github.sangcomz.stickytimeline.compose.ui.theme.StickyTimeLineTheme
+import io.github.sangcomz.stickytimelineview.compose.StickyTimeLineView
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

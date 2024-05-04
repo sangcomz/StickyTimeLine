@@ -1,4 +1,4 @@
-package xyz.sangcomz.github.sample.compose.ui.theme
+package io.github.sangcomz.stickytimeline.compose.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
