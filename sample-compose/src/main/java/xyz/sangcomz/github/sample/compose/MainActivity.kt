@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import xyz.sangcomz.github.sample.compose.ui.theme.StickyTimeLineTheme
+import xyz.sangcomz.github.stickytimelineview.compose.StickyTimeLineView
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,10 +32,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+    StickyTimeLineView()
 }
 
 @Preview(showBackground = true)
