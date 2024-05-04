@@ -8,3 +8,4 @@ gradle.ext.set('targetSdk', 34)
 gradle.ext.set('compileSdk', 34)
 include ':stickytimelineview-compose'
 include ':sample-compose'
+include ':data'

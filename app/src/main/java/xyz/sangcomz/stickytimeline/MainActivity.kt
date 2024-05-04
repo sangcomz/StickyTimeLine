@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import io.github.sangcomz.stickytimeline.data.Singer
+import io.github.sangcomz.stickytimeline.data.SingerRepo
 import xyz.sangcomz.stickytimelineview.TimeLineRecyclerView
 import xyz.sangcomz.stickytimelineview.callback.SectionCallback
 import xyz.sangcomz.stickytimelineview.model.SectionInfo
@@ -85,7 +87,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     //Get data method
-    private fun getSingerList(): List<Singer> = SingerRepo().singerList
+    private fun getSingerList() = SingerRepo().singerList
 
 
     //Get SectionCallback method
