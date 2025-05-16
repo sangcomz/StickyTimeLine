@@ -2,6 +2,7 @@ package io.github.sangcomz.stickytimelineview.compose
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -22,13 +23,14 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun <T> StickyTimeLineView(
+fun <T> StickyTimeLineLazyColumn(
     groupedItems: Map<String, List<T>>,
     modifier: Modifier = Modifier,
     lineColor: Color = Color.Blue,
     lineWidth: Dp = 2.dp,
+    verticalSpaceBy: Dp = 12.dp,
     timeLineDot: @Composable () -> Unit = { TimelineDot() },
-    sectionHeader: @Composable (key: String, firstItem: T) -> Unit,
+    sectionHeader: @Composable (key: String) -> Unit,
     itemContent: @Composable (item: T) -> Unit
 ) {
     Box(
@@ -50,7 +52,10 @@ fun <T> StickyTimeLineView(
             )
         }
 
-        LazyColumn(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(verticalSpaceBy),
+        ) {
             groupedItems.forEach { (key, items) ->
                 stickyHeader {
                     Row(
@@ -64,7 +69,7 @@ fun <T> StickyTimeLineView(
                             timeLineDot()
                         }
 
-                        sectionHeader(key, items.first())
+                        sectionHeader(key)
                     }
                 }
                 itemsIndexed(items) { _, item ->

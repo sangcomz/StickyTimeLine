@@ -4,17 +4,17 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.SubcomposeLayout
@@ -37,6 +37,8 @@ fun <T> StickyTimeLineLazyRow(
     groupBy: (T) -> String,
     lineColor: Color = Color.Blue,
     lineWidth: Dp = 2.dp,
+    horizontalSpaceBy: Dp = 12.dp,
+    contentPaddingValues: PaddingValues = PaddingValues(horizontal = 8.dp),
     headerContent: @Composable (group: String) -> Unit,
     itemContent: @Composable (item: T) -> Unit,
     dotContent: @Composable (group: String) -> Unit = {
@@ -50,10 +52,7 @@ fun <T> StickyTimeLineLazyRow(
     val state = rememberLazyListState()
 
     Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .wrapContentHeight(),
-        contentAlignment = Alignment.Center
+        modifier = modifier.fillMaxWidth()
     ) {
         Column {
             HeaderWithTimeLine(
@@ -68,7 +67,8 @@ fun <T> StickyTimeLineLazyRow(
             LazyRow(
                 state = state,
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                contentPadding = contentPaddingValues,
+                horizontalArrangement = Arrangement.spacedBy(horizontalSpaceBy)
             ) {
                 items(items) { item ->
                     itemContent(item)
@@ -101,7 +101,6 @@ fun <T> HeaderWithTimeLine(
 
         val firstGroup = visibleGroups.first()
         val nextGroup = visibleGroups.getOrNull(1)
-
 
         val headers = visibleGroups.map { groupId ->
             val header = subcompose("StickyHeader-$groupId") {
@@ -185,7 +184,8 @@ fun <T> HeaderWithTimeLine(
 
             headers.forEach { (groupId, pair) ->
                 val (placeables, itemOffset) = pair
-                val x = if (groupId == firstGroup) pushOffset else itemOffset
+                val x = if (groupId == firstGroup) pushOffset else max(itemOffset, 0)
+                println("Header $groupId offset: $x")
                 placeables.forEach {
                     it.placeRelative(
                         x = x,
@@ -196,7 +196,7 @@ fun <T> HeaderWithTimeLine(
 
             dots.forEach { (groupId, pair) ->
                 val (placeables, itemOffset) = pair
-                val x = if (groupId == firstGroup) pushOffset else itemOffset
+                val x = if (groupId == firstGroup) pushOffset else max(itemOffset, 0)
                 placeables.forEach {
                     it.placeRelative(
                         x = x,
