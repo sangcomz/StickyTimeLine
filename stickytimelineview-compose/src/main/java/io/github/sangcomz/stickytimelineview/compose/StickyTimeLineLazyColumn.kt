@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -19,12 +18,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun <T> StickyTimeLineView(
     groupedItems: Map<String, List<T>>,
     modifier: Modifier = Modifier,
+    lineColor: Color = Color.Blue,
+    lineWidth: Dp = 2.dp,
     timeLineDot: @Composable () -> Unit = { TimelineDot() },
     sectionHeader: @Composable (key: String, firstItem: T) -> Unit,
     itemContent: @Composable (item: T) -> Unit
@@ -41,10 +43,10 @@ fun <T> StickyTimeLineView(
         ) {
             val centerX = size.width / 2
             drawLine(
-                color = Color(0xFFB71C1C),
+                color = lineColor,
                 start = Offset(centerX, 0f),
                 end = Offset(centerX, size.height),
-                strokeWidth = 4.dp.toPx()
+                strokeWidth = lineWidth.toPx()
             )
         }
 

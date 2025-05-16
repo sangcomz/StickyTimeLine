@@ -3,11 +3,15 @@ package io.github.sangcomz.stickytimeline.compose
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -25,6 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.github.sangcomz.stickytimelineview.compose.StickyTimeLineLazyRow
 import io.github.sangcomz.stickytimeline.compose.ui.theme.StickyTimeLineTheme
 import io.github.sangcomz.stickytimeline.data.Singer
 import io.github.sangcomz.stickytimeline.data.SingerRepo
@@ -40,15 +45,35 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val singers = SingerRepo().singerList
-                    StickyTimeLineView(
-                        groupedItems = singers.groupBy { it.debuted }.toSortedMap(),
-                        sectionHeader = { year, firstSinger ->
-                            SectionHeader(year = year, group = firstSinger.group)
-                        },
-                        itemContent = { singer ->
-                            SingerItem(singer = singer)
-                        }
-                    )
+
+                    Column {
+                        StickyTimeLineView(
+                            modifier = Modifier.weight(1f),
+                            groupedItems = singers.groupBy { it.debuted }.toSortedMap(),
+                            sectionHeader = { year, firstSinger ->
+                                SectionHeader(year = year, group = firstSinger.group)
+                            },
+                            timeLineDot = { Dot() },
+                            itemContent = { singer ->
+                                SingerItem(singer = singer)
+                            }
+                        )
+
+                        StickyTimeLineLazyRow(
+                            modifier = Modifier
+                                .weight(.5f)
+                                .background(Color.Green),
+                            items = singers,
+                            groupBy = { it.debuted },
+                            headerContent = { year ->
+                                SectionHeader(year = year, group = "Group")
+                            },
+                            itemContent = { singer ->
+                                SingerItem(singer = singer, isHorizontal = true)
+                            }
+                        )
+                    }
+
                 }
             }
         }
@@ -60,38 +85,38 @@ fun SectionHeader(
     year: String,
     group: String,
 ) {
-    Surface(modifier = Modifier.fillMaxWidth()) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.wrapContentHeight().padding(8.dp)
-        ) {
-            Column() {
-                Text(
-                    text = year,
-                    style = TextStyle(
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFF414FCA)
-                    )
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.wrapContentHeight()
+    ) {
+        Column {
+            Text(
+                text = year,
+                style = TextStyle(
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF414FCA)
                 )
-                Text(
-                    text = group,
-                    style = TextStyle(
-                        fontSize = 14.sp,
-                        color = Color(0xFFD16767)
-                    )
+            )
+            Text(
+                text = group,
+                style = TextStyle(
+                    fontSize = 14.sp,
+                    color = Color(0xFFD16767)
                 )
-            }
+            )
         }
     }
 }
 
 @Composable
-fun SingerItem(singer: Singer) {
+fun SingerItem(singer: Singer, isHorizontal: Boolean = false) {
     Row(
         modifier = Modifier
             .wrapContentSize()
-            .padding(top = 4.dp, bottom = 4.dp),
+            .then(
+                if (isHorizontal) Modifier.padding(horizontal = 0.dp) else Modifier.padding(vertical = 8.dp)
+            ),
         verticalAlignment = Alignment.Top
     ) {
         Card(
@@ -112,6 +137,31 @@ fun SingerItem(singer: Singer) {
                 )
             }
         }
+    }
+}
+
+@Composable
+fun Dot() {
+    Box(
+        modifier = Modifier
+            .width(24.dp)
+            .fillMaxHeight(),
+        contentAlignment = Alignment.Center
+    ) {
+        Box(
+            modifier = Modifier
+                .size(24.dp)
+                .background(
+                    Color.Gray.copy(alpha = 0.2f),
+                    shape = androidx.compose.foundation.shape.CircleShape
+                )
+        )
+
+        Box(
+            modifier = Modifier
+                .size(12.dp)
+                .background(Color.Gray, shape = androidx.compose.foundation.shape.CircleShape)
+        )
     }
 }
 
