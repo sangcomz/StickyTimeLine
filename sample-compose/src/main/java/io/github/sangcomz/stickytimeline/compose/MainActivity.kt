@@ -76,15 +76,18 @@ class MainActivity : ComponentActivity() {
                                 textAlign = TextAlign.Center
                             )
                         }
+
                         StickyTimeLineLazyColumn(
                             modifier = Modifier.weight(.5f),
                             groupedItems = sortedMusicList.groupBy { it.year }.toSortedMap(),
                             sectionHeader = { year ->
                                 SectionHeaderForLazyColumn(year = year)
                             },
-                            timeLineDot = { Dot() },
                             itemContent = { music ->
                                 MusicCardForLazyColumn(music = music)
+                            },
+                            timeLineDot = {
+                                Dot()
                             }
                         )
 
@@ -238,13 +241,13 @@ fun MusicCardForLazyColumn(music: Music) {
 fun Dot() {
     Box(
         modifier = Modifier
-            .width(24.dp)
-            .fillMaxHeight(),
+            .width(48.dp)
+            .wrapContentHeight(),
         contentAlignment = Alignment.Center
     ) {
         Box(
             modifier = Modifier
-                .size(24.dp)
+                .size(32.dp)
                 .background(
                     Color.Gray.copy(alpha = 0.2f),
                     shape = androidx.compose.foundation.shape.CircleShape
@@ -253,7 +256,7 @@ fun Dot() {
 
         Box(
             modifier = Modifier
-                .size(12.dp)
+                .size(24.dp)
                 .background(Color.Gray, shape = androidx.compose.foundation.shape.CircleShape)
         )
     }
