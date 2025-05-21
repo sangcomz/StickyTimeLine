@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -38,23 +38,49 @@ import androidx.compose.ui.unit.max
 import kotlin.math.roundToInt
 
 @Composable
-fun <T> StickyTimeLineLazyColumn(
-    groupedItems: Map<String, List<T>>,
+fun <T, G> StickyTimeLineLazyColumn(
     modifier: Modifier = Modifier,
+    items: List<T>,
+    groupBy: (T) -> String,
+    makeHeaderItem: (key: String, items: List<T>) -> G,
+    generateItemKey: ((T) -> Any) = { it.hashCode() },
     contentBackgroundColor: Color = Color.White,
     lineColor: Color = Color.Blue,
     lineWidth: Dp = 2.dp,
     verticalSpaceBy: Dp = 12.dp,
     timeLineHorizontalPadding: Dp = 0.dp,
     timeLineDot: @Composable () -> Unit,
-    sectionHeader: @Composable (key: String) -> Unit,
+    sectionHeader: @Composable (headerItem: G) -> Unit,
     itemContent: @Composable (item: T) -> Unit,
 ) {
     val density = LocalDensity.current
     val listState = rememberLazyListState()
-
     var stickyHeaderHeight by remember { mutableIntStateOf(0) }
     val dotWidthPx = remember { mutableIntStateOf(0) }
+
+    val groupedMap = remember(items, groupBy) {
+        val map = linkedMapOf<String, MutableList<T>>()
+        for (item in items) {
+            val key = groupBy(item)
+            val list = map.getOrPut(key) { mutableListOf() }
+            list.add(item)
+        }
+        map
+    }
+
+    val headerItemMap = remember(groupedMap, makeHeaderItem) {
+        groupedMap.mapValues { (key, value) -> makeHeaderItem(key, value) }
+    }
+
+    val headerIndexList = remember(groupedMap) {
+        val list = mutableListOf<Pair<String, Int>>()
+        var index = 0
+        groupedMap.forEach { (key, items) ->
+            list.add(key to index)
+            index += 1 + items.size
+        }
+        list
+    }
 
     val timeLineTotalWidth by remember {
         derivedStateOf {
@@ -85,43 +111,35 @@ fun <T> StickyTimeLineLazyColumn(
             )
         }
 
-        val headerIndexList = remember(groupedItems) {
-            val result = mutableListOf<Pair<String, Int>>()
-            var index = 0
-            groupedItems.forEach { (key, items) ->
-                result.add(key to index)
-                index += 1 + items.size
-            }
-            result
-        }
-
         LazyColumn(
             state = listState,
             modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(verticalSpaceBy),
+            verticalArrangement = Arrangement.spacedBy(verticalSpaceBy)
         ) {
-            groupedItems.forEach { (key, items) ->
+            groupedMap.forEach { (key, items) ->
+                val headerItem = headerItemMap[key]!!
                 item {
                     HeaderItem(
-                        key = key,
+                        headerItem = headerItem,
+                        dotWidthPx = dotWidthPx,
                         timeLineDot = timeLineDot,
                         sectionHeader = sectionHeader,
-                        modifier = Modifier,
-                        lineColor = lineColor,
-                        lineWidth = lineWidth,
-                        dotWithPx = dotWidthPx,
                         contentBackgroundColor = contentBackgroundColor,
+                        lineColor = lineColor,
+                        lineWidth = lineWidth
                     )
                 }
                 itemsIndexed(items) { _, item ->
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight(),
-                        verticalAlignment = Alignment.Top
-                    ) {
-                        Spacer(Modifier.size(timeLineTotalWidth))
-                        itemContent(item)
+                    key(generateItemKey(item)) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wrapContentHeight(),
+                            verticalAlignment = Alignment.Top
+                        ) {
+                            Spacer(Modifier.width(timeLineTotalWidth))
+                            itemContent(item)
+                        }
                     }
                 }
             }
@@ -139,8 +157,7 @@ fun <T> StickyTimeLineLazyColumn(
             val nextHeaderIndex = headerIndexList.indexOfFirst { it.first == key } + 1
             val nextHeaderOffset = listState.layoutInfo.visibleItemsInfo
                 .firstOrNull { it.index == headerIndexList.getOrNull(nextHeaderIndex)?.second }
-                ?.offset
-                ?: 0
+                ?.offset ?: 0
 
             val yOffset = if (nextHeaderOffset in 1 until stickyHeaderHeight) {
                 nextHeaderOffset - stickyHeaderHeight
@@ -148,22 +165,24 @@ fun <T> StickyTimeLineLazyColumn(
                 0
             }
 
+            val headerItem = headerItemMap[key]!!
+
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .offset { IntOffset(x = 0, y = yOffset) }
+                    .offset { IntOffset(0, yOffset) }
                     .onGloballyPositioned { coordinates ->
                         stickyHeaderHeight = coordinates.size.height
                     }
             ) {
                 HeaderItem(
-                    key = key,
+                    headerItem = headerItem,
+                    dotWidthPx = dotWidthPx,
                     timeLineDot = timeLineDot,
                     sectionHeader = sectionHeader,
-                    lineColor = lineColor,
-                    lineWidth = lineWidth,
-                    dotWithPx = dotWidthPx,
                     contentBackgroundColor = contentBackgroundColor,
+                    lineColor = lineColor,
+                    lineWidth = lineWidth
                 )
             }
         }
@@ -171,24 +190,28 @@ fun <T> StickyTimeLineLazyColumn(
 }
 
 @Composable
-private fun HeaderItem(
-    modifier: Modifier = Modifier,
-    key: String,
+private fun <G> HeaderItem(
+    headerItem: G,
+    dotWidthPx: MutableIntState,
+    timeLineDot: @Composable () -> Unit,
+    sectionHeader: @Composable (G) -> Unit,
     contentBackgroundColor: Color,
     lineColor: Color,
     lineWidth: Dp,
-    dotWithPx: MutableIntState,
-    timeLineDot: @Composable () -> Unit,
-    sectionHeader: @Composable (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val density = LocalDensity.current
+    val horizontalPadding = 8.dp
+    val horizontalPaddingPx = with(density) { horizontalPadding.roundToPx() }
+    val lineWidthPx = with(density) { lineWidth.toPx().roundToInt() }
 
-    SubcomposeLayout(modifier = modifier.background(contentBackgroundColor)) { constraints ->
+    SubcomposeLayout(
+        modifier = modifier.background(contentBackgroundColor)
+    ) { constraints ->
+
         val dotPlaceable = subcompose("dot", timeLineDot).first().measure(constraints)
 
-        val lineWidthPx = lineWidth.toPx().roundToInt()
-        val timeLineWidthPx =
-            maxOf(dotPlaceable.width, lineWidthPx) + with(density) { 8.dp.roundToPx() * 2 }
+        val timeLineWidthPx = maxOf(dotPlaceable.width, lineWidthPx) + horizontalPaddingPx * 2
 
         val linePlaceable = subcompose("line") {
             Box(
@@ -215,22 +238,20 @@ private fun HeaderItem(
                     .fillMaxWidth()
                     .wrapContentHeight()
             ) {
-                Spacer(modifier = Modifier.width(with(density) { timeLineWidthPx.toDp() }))
-                sectionHeader(key)
+                Spacer(Modifier.width(with(density) { timeLineWidthPx.toDp() }))
+                sectionHeader(headerItem)
             }
         }.first().measure(constraints)
 
         val height = maxOf(dotPlaceable.height, headerPlaceable.height)
 
-        dotWithPx.intValue = timeLineWidthPx
+        dotWidthPx.intValue = timeLineWidthPx
 
         layout(constraints.maxWidth, height) {
             linePlaceable.placeRelative(0, 0)
-
             val dotX = (timeLineWidthPx - dotPlaceable.width) / 2
             val dotY = (height - dotPlaceable.height) / 2
             dotPlaceable.placeRelative(dotX, dotY)
-
             headerPlaceable.placeRelative(0, 0)
         }
     }

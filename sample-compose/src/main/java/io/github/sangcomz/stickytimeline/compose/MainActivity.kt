@@ -79,7 +79,11 @@ class MainActivity : ComponentActivity() {
 
                         StickyTimeLineLazyColumn(
                             modifier = Modifier.weight(.5f),
-                            groupedItems = sortedMusicList.groupBy { it.year }.toSortedMap(),
+                            items = sortedMusicList,
+                            makeHeaderItem = { key, _ ->
+                                key
+                            },
+                            groupBy = { it.year },
                             sectionHeader = { year ->
                                 SectionHeaderForLazyColumn(year = year)
                             },
@@ -115,6 +119,9 @@ class MainActivity : ComponentActivity() {
                             lineColor = Color(0xff003E8F),
                             lineWidth = 2.dp,
                             groupBy = { it.year },
+                            makeHeaderItem = { key, _ ->
+                                key
+                            },
                             headerContent = { year ->
                                 SectionHeaderForLazyRow(year = year)
                             },

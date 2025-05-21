@@ -15,6 +15,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.SubcomposeLayout
@@ -22,24 +24,14 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlin.math.max
 
-/**
- * A fully generic StickyHeader LazyRow library component.
- *
- * @param items list of data items
- * @param groupBy lambda to extract group key from item
- * @param headerContent composable for group header
- * @param itemContent composable for item
- */
 @Composable
-fun <T> StickyTimeLineLazyRow(
+fun <T, G> StickyTimeLineLazyRow(
     modifier: Modifier = Modifier,
     items: List<T>,
     groupBy: (T) -> String,
-    lineColor: Color = Color.Blue,
-    lineWidth: Dp = 2.dp,
-    horizontalSpaceBy: Dp = 12.dp,
-    contentPaddingValues: PaddingValues = PaddingValues(horizontal = 8.dp),
-    headerContent: @Composable (group: String) -> Unit,
+    makeHeaderItem: (key: String, items: List<T>) -> G,
+    generateItemKey: ((T) -> Any) = { it.hashCode() },
+    headerContent: @Composable (headerItem: G) -> Unit,
     itemContent: @Composable (item: T) -> Unit,
     dotContent: @Composable (group: String) -> Unit = {
         Box(
@@ -48,21 +40,39 @@ fun <T> StickyTimeLineLazyRow(
                 .background(Color.Blue, CircleShape)
         )
     },
+    lineColor: Color = Color.Blue,
+    lineWidth: Dp = 2.dp,
+    horizontalSpaceBy: Dp = 12.dp,
+    contentPaddingValues: PaddingValues = PaddingValues(horizontal = 8.dp),
 ) {
     val state = rememberLazyListState()
+
+    val groupedMap = remember(items, groupBy) {
+        val map = linkedMapOf<String, MutableList<T>>()
+        for (item in items) {
+            val key = groupBy(item)
+            val list = map.getOrPut(key) { mutableListOf() }
+            list.add(item)
+        }
+        map
+    }
+
+    val headerItemMap = remember(groupedMap, makeHeaderItem) {
+        groupedMap.mapValues { (key, value) -> makeHeaderItem(key, value) }
+    }
 
     Box(
         modifier = modifier.fillMaxWidth()
     ) {
         Column {
-            HeaderWithTimeLine(
+            HeaderWithTimeLineOptimized(
                 state = state,
-                items = items,
-                groupBy = groupBy,
-                lineColor = lineColor,
-                lineWidth = lineWidth,
+                groupedMap = groupedMap,
+                headerItemMap = headerItemMap,
                 headerContent = headerContent,
-                dotContent = dotContent
+                dotContent = dotContent,
+                lineColor = lineColor,
+                lineWidth = lineWidth
             )
             LazyRow(
                 state = state,
@@ -71,7 +81,9 @@ fun <T> StickyTimeLineLazyRow(
                 horizontalArrangement = Arrangement.spacedBy(horizontalSpaceBy)
             ) {
                 items(items) { item ->
-                    itemContent(item)
+                    key(generateItemKey(item)) {
+                        itemContent(item)
+                    }
                 }
             }
         }
@@ -79,14 +91,14 @@ fun <T> StickyTimeLineLazyRow(
 }
 
 @Composable
-fun <T> HeaderWithTimeLine(
+fun <T, G> HeaderWithTimeLineOptimized(
     state: LazyListState,
-    items: List<T>,
-    groupBy: (T) -> String,
+    groupedMap: Map<String, List<T>>,
+    headerItemMap: Map<String, G>,
+    headerContent: @Composable (headerItem: G) -> Unit,
+    dotContent: @Composable (group: String) -> Unit,
     lineColor: Color,
-    lineWidth: Dp,
-    headerContent: @Composable (group: String) -> Unit,
-    dotContent: @Composable (group: String) -> Unit
+    lineWidth: Dp
 ) {
     SubcomposeLayout { constraints ->
         val visibleItems = state.layoutInfo.visibleItemsInfo
@@ -95,20 +107,30 @@ fun <T> HeaderWithTimeLine(
         if (visibleItems.isEmpty()) return@SubcomposeLayout layout(0, 0) {}
 
         val visibleGroups = visibleItems
-            .mapNotNull { items.getOrNull(it.index)?.let(groupBy) }
+            .mapNotNull { itemInfo ->
+                val idx = itemInfo.index
+                groupedMap.entries.firstOrNull { entry ->
+                    idx >= 0 && groupedMap.values.takeWhile { it !== entry.value }.sumOf { it.size } <= idx
+                            && idx < groupedMap.values.takeWhile { it !== entry.value }.sumOf { it.size } + entry.value.size
+                }?.key
+            }
             .distinct()
-            .sortedBy { group -> items.indexOfFirst { groupBy(it) == group } }
+
+        if (visibleGroups.isEmpty()) return@SubcomposeLayout layout(0, 0) {}
 
         val firstGroup = visibleGroups.first()
         val nextGroup = visibleGroups.getOrNull(1)
 
         val headers = visibleGroups.map { groupId ->
             val header = subcompose("StickyHeader-$groupId") {
-                headerContent(groupId)
+                headerContent(headerItemMap[groupId]!!)
             }.map { it.measure(constraints) }
 
             val firstItem = visibleItems.firstOrNull {
-                items.getOrNull(it.index)?.let(groupBy) == groupId
+                val idx = it.index
+                val items = groupedMap[groupId] ?: emptyList()
+                val groupStart = groupedMap.values.takeWhile { it !== items }.sumOf { it.size }
+                idx in groupStart until (groupStart + items.size)
             }
             val offsetX = firstItem?.offset ?: 0
 
@@ -121,7 +143,10 @@ fun <T> HeaderWithTimeLine(
             }.map { it.measure(constraints) }
 
             val firstItem = visibleItems.firstOrNull {
-                items.getOrNull(it.index)?.let(groupBy) == groupId
+                val idx = it.index
+                val items = groupedMap[groupId] ?: emptyList()
+                val groupStart = groupedMap.values.takeWhile { it !== items }.sumOf { it.size }
+                idx in groupStart until (groupStart + items.size)
             }
             val offsetX = firstItem?.offset ?: 0
 
@@ -147,7 +172,10 @@ fun <T> HeaderWithTimeLine(
         val firstHeaderWidth = firstHeader?.second?.first?.maxOfOrNull { it.width } ?: 0
         val pushOffset = nextGroup?.let { next ->
             val nextItem = visibleItems.firstOrNull {
-                items.getOrNull(it.index)?.let(groupBy) == next
+                val idx = it.index
+                val items = groupedMap[next] ?: emptyList()
+                val groupStart = groupedMap.values.takeWhile { it !== items }.sumOf { it.size }
+                idx in groupStart until (groupStart + items.size)
             }
 
             nextItem?.let {
@@ -185,7 +213,6 @@ fun <T> HeaderWithTimeLine(
             headers.forEach { (groupId, pair) ->
                 val (placeables, itemOffset) = pair
                 val x = if (groupId == firstGroup) pushOffset else max(itemOffset, 0)
-                println("Header $groupId offset: $x")
                 placeables.forEach {
                     it.placeRelative(
                         x = x,
