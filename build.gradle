@@ -3,7 +3,7 @@
 buildscript {
 
     ext {
-        kotlin_version = '1.9.23'
+        kotlin_version = '2.1.20'
         constraint_version = '2.2.1'
     }
 

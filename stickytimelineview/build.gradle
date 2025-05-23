@@ -31,7 +31,7 @@ android {
     }
 }
 
-apply from: '../gradle/release.gradle'
+apply from: '../gradle/release.view.gradle'
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
