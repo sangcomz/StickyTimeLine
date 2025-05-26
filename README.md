@@ -1,16 +1,22 @@
 # StickyTimeLine
 
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.sangcomz/stickytimeline-compose)](https://search.maven.org/artifact/io.github.sangcomz/stickytimeline-compose)
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.sangcomz/StickyTimeLine)](https://search.maven.org/artifact/io.github.sangcomz/StickyTimeLine)
 
-StickyTimeLine is timeline view for android.
+StickyTimeLine is timeline view for android. Now supports both View system and Jetpack Compose!
 
 ## What's New? :tada:
-- [Improvement] lib version update
+- [New] Jetpack Compose version released! 🎉
 
  ## Result Screen
  
  Feel free to send me a pull request with your app and I'll link you here:
- 
+ ### Jetpack Compose
+|                                                                                                                                                   Sample                                                                                                                                                   |
+ |:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+|                                                                                                                          <img width="auto" height="500px" src="/pic/compose.gif">                                                                                                                          |
+
+### View System
  | Sample <p style="float:left;">  <a href="https://play.google.com/store/apps/details?id=xyz.sangcomz.stickytimeline">  <img HEIGHT="40" WIDTH="135" alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/apps/en-play-badge.png" /></a></p>   | AlleysMap <p style="float:left;"> <a href="https://play.google.com/store/apps/details?id=co.alleys.android"> <img HEIGHT="40" WIDTH="135" alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/apps/en-play-badge.png" /> </a></p> | StockRoom <p style="float:left;"> <a href="https://play.google.com/store/apps/details?id=com.thecloudsite.stockroom"> <img HEIGHT="40" WIDTH="135" alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/apps/en-play-badge.png" /></a></p>   |
  |:---------------------------------:|:--------------------------------:|:--------------------------------:|
  | <img src="/pic/sample_result.gif">|<img src="/pic/alleys_result.gif">|<img width="auto" height="500px" src="/pic/stockroom_result.gif">|
@@ -18,14 +24,195 @@ StickyTimeLine is timeline view for android.
 ## How to Use
 
 ### Gradle
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.sangcomz/StickyTimeLine)](https://search.maven.org/artifact/io.github.sangcomz/StickyTimeLine)
+
+#### View System
 ```groovy
     dependencies {
         implementation 'io.github.sangcomz:StickyTimeLine:x.x.x'
     }
 ```
+
+#### Jetpack Compose
+```groovy
+    dependencies {
+        implementation 'io.github.sangcomz:stickytimeline-compose:x.x.x'
+    }
+```
 ### Usage
-#### activity_main.xml
+
+#### Jetpack Compose Usage
+
+##### Basic Usage - LazyColumn
+```kotlin
+@Composable
+fun TimeLineExample() {
+    val musicList = remember { MusicRepo().musicList }
+    val sortedMusicList = musicList.sortedWith(
+        compareBy(
+            { it.year.toIntOrNull() ?: 0 },
+            { it.month.toIntOrNull() ?: 0 }
+        )
+    )
+    
+    StickyTimeLineLazyColumn(
+        items = sortedMusicList,
+        groupBy = { it.year },
+        makeHeaderItem = { key, _ -> key },
+        sectionHeader = { year ->
+            Column(
+                modifier = Modifier
+                    .background(Color.White)
+                    .padding(8.dp)
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    text = year,
+                    style = TextStyle(
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF414FCA)
+                    )
+                )
+                Text(
+                    text = "Popular Music",
+                    style = TextStyle(
+                        fontSize = 14.sp,
+                        color = Color(0xFFD16767)
+                    )
+                )
+            }
+        },
+        itemContent = { music ->
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = MaterialTheme.shapes.medium,
+                elevation = CardDefaults.cardElevation(4.dp)
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text(music.title, style = MaterialTheme.typography.titleMedium)
+                    Text(music.artist, style = MaterialTheme.typography.bodyMedium)
+                }
+            }
+        },
+        timeLineDot = {
+            Box(
+                modifier = Modifier
+                    .size(24.dp)
+                    .background(
+                        Color.Gray,
+                        shape = CircleShape
+                    )
+            )
+        }
+    )
+}
+```
+
+##### Basic Usage - LazyRow
+```kotlin
+@Composable
+fun TimeLineRowExample() {
+    val musicList = remember { MusicRepo().musicList }
+    val sortedMusicList = musicList.sortedWith(
+        compareBy(
+            { it.year.toIntOrNull() ?: 0 },
+            { it.month.toIntOrNull() ?: 0 }
+        )
+    )
+    
+    StickyTimeLineLazyRow(
+        items = sortedMusicList,
+        lineColor = Color(0xFF51ae45),
+        lineWidth = 2.dp,
+        groupBy = { it.year },
+        makeHeaderItem = { key, _ -> key },
+        headerContent = { year ->
+            Column(
+                modifier = Modifier
+                    .wrapContentSize()
+                    .padding(horizontal = 8.dp)
+            ) {
+                Text(
+                    text = year,
+                    style = TextStyle(
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF414FCA)
+                    )
+                )
+                Text(
+                    text = "Popular Music",
+                    style = TextStyle(
+                        fontSize = 14.sp,
+                        color = Color(0xFFD16767)
+                    )
+                )
+            }
+        },
+        itemContent = { music ->
+            Card(
+                modifier = Modifier.wrapContentWidth(),
+                shape = MaterialTheme.shapes.medium,
+                elevation = CardDefaults.cardElevation(4.dp)
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text(music.title, style = MaterialTheme.typography.titleMedium)
+                    Text(music.artist, style = MaterialTheme.typography.bodyMedium)
+                }
+            }
+        },
+        dotContent = { _ ->
+            Box(
+                modifier = Modifier
+                    .size(24.dp)
+                    .background(
+                        Color.Gray,
+                        shape = CircleShape
+                    )
+            )
+        }
+    )
+}
+```
+
+##### Parameters - StickyTimeLineLazyColumn
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `modifier` | `Modifier` | `Modifier` | Modifier for the component |
+| `items` | `List<T>` | - | List of items to display in the timeline |
+| `groupBy` | `(T) -> String` | - | Function to group items by section (returns section key) |
+| `makeHeaderItem` | `(key: String, items: List<T>) -> G` | - | Function to create header item from section key and items |
+| `generateItemKey` | `(T) -> Any` | `{ it.hashCode() }` | Function to generate unique key for each item (for recomposition optimization) |
+| `contentBackgroundColor` | `Color` | `Color.White` | Background color of the content area |
+| `lineColor` | `Color` | `Color.Blue` | Color of the timeline line |
+| `lineWidth` | `Dp` | `2.dp` | Width of the timeline line |
+| `verticalSpaceBy` | `Dp` | `12.dp` | Vertical spacing between items |
+| `timeLineHorizontalPadding` | `Dp` | `0.dp` | Horizontal padding for the timeline |
+| `timeLineDot` | `@Composable () -> Unit` | - | Composable for timeline dot |
+| `sectionHeader` | `@Composable (headerItem: G) -> Unit` | - | Composable for section header |
+| `itemContent` | `@Composable (item: T) -> Unit` | - | Composable content for each item |
+
+##### Parameters - StickyTimeLineLazyRow
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `modifier` | `Modifier` | `Modifier` | Modifier for the component |
+| `items` | `List<T>` | - | List of items to display in the timeline |
+| `groupBy` | `(T) -> String` | - | Function to group items by section (returns section key) |
+| `makeHeaderItem` | `(key: String, items: List<T>) -> G` | - | Function to create header item from section key and items |
+| `generateItemKey` | `(T) -> Any` | `{ it.hashCode() }` | Function to generate unique key for each item (for recomposition optimization) |
+| `headerContent` | `@Composable (headerItem: G) -> Unit` | - | Composable for section header |
+| `itemContent` | `@Composable (item: T) -> Unit` | - | Composable content for each item |
+| `dotContent` | `@Composable (group: String) -> Unit` | Default blue circle | Composable for timeline dot |
+| `lineColor` | `Color` | `Color.Blue` | Color of the timeline line |
+| `lineWidth` | `Dp` | `2.dp` | Width of the timeline line |
+| `horizontalSpaceBy` | `Dp` | `12.dp` | Horizontal spacing between items |
+| `contentPaddingValues` | `PaddingValues` | `PaddingValues(horizontal = 8.dp)` | Padding values for the content |
+
+#### View System Usage
+
+##### activity_main.xml
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"

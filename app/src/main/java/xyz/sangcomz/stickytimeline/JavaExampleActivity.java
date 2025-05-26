@@ -12,6 +12,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+import io.github.sangcomz.stickytimeline.data.Singer;
+import io.github.sangcomz.stickytimeline.data.SingerRepo;
 import xyz.sangcomz.stickytimelineview.TimeLineRecyclerView;
 import xyz.sangcomz.stickytimelineview.callback.SectionCallback;
 import xyz.sangcomz.stickytimelineview.model.SectionInfo;
