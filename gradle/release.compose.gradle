@@ -26,7 +26,7 @@ if (project.rootProject.file('local.properties').isFile()) {
 
 group = "io.github.sangcomz"
 version = gradle.composeVersionName
-archivesBaseName = "StickyTimeLine-Compose"
+archivesBaseName = "stickytimeline-compose"
 
 def siteUrl = 'https://github.com/sangcomz/StickyTimeLine'      // Homepage URL of the library
 def gitUrl = 'https://github.com/sangcomz/StickyTimeLine.git'   // Git repository URL

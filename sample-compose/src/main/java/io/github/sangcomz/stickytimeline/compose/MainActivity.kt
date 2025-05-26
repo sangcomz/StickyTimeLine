@@ -162,7 +162,7 @@ fun SectionHeaderForLazyColumn(
                 )
             )
             Text(
-                text = "인기 가요",
+                text = "Popular Songs",
                 style = TextStyle(
                     fontSize = 14.sp,
                     color = Color(0xFFD16767)
@@ -192,7 +192,7 @@ fun SectionHeaderForLazyRow(
                 )
             )
             Text(
-                text = "인기 가요",
+                text = "Popular Songs",
                 style = TextStyle(
                     fontSize = 14.sp,
                     color = Color(0xFFD16767)
@@ -214,8 +214,7 @@ fun MusicCardForLazyRow(music: Music) {
             Text(music.artist, style = MaterialTheme.typography.bodyMedium)
             Text(music.album, style = MaterialTheme.typography.bodySmall)
             Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                "${music.year}년 ${music.month}월 · ${music.genre}",
+            Text(text = "${music.year} ${music.month} · ${music.genre}",
                 style = MaterialTheme.typography.bodySmall
             )
             Text(music.duration, style = MaterialTheme.typography.bodySmall)
@@ -235,8 +234,7 @@ fun MusicCardForLazyColumn(music: Music) {
             Text(music.artist, style = MaterialTheme.typography.bodyMedium)
             Text(music.album, style = MaterialTheme.typography.bodySmall)
             Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                "${music.year}년 ${music.month}월 · ${music.genre}",
+            Text(text = "${music.year} ${music.month} · ${music.genre}",
                 style = MaterialTheme.typography.bodySmall
             )
             Text(music.duration, style = MaterialTheme.typography.bodySmall)
