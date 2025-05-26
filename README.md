@@ -35,7 +35,7 @@ StickyTimeLine is timeline view for android. Now supports both View system and J
 #### Jetpack Compose
 ```groovy
     dependencies {
-        implementation 'io.github.sangcomz:stickytimeline-compose:0.0.1'
+        implementation 'io.github.sangcomz:stickytimeline-compose:x.x.x'
     }
 ```
 ### Usage
