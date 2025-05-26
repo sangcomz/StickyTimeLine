@@ -39,8 +39,6 @@ android {
         }
     }
 
-    namespace 'xyz.sangcomz.stickytimeline'
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_21
         targetCompatibility JavaVersion.VERSION_21

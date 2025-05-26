@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initVerticalRecyclerView() {
-        val singerList = getSingerList()
+        val singerList: List<Singer> = getSingerList()
         findViewById<TimeLineRecyclerView>(R.id.vertical_recycler_view).apply {
             adapter = SingerAdapter(
                 layoutInflater,
@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initHorizontalRecyclerView() {
-        val singerList = getSingerList()
+        val singerList: List<Singer> = getSingerList()
         findViewById<TimeLineRecyclerView>(R.id.horizontal_recycler_view).apply {
             adapter = SingerAdapter(
                 layoutInflater,
