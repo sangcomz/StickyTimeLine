@@ -1,4 +1,4 @@
-package io.github.sangcomz.stickytimeline.compose.ui.theme
+package io.github.sangcomz.sample.compose.ui.theme
 
 import android.app.Activity
 import android.os.Build
