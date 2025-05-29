@@ -1,4 +1,4 @@
-package io.github.sangcomz.stickytimeline.compose
+package io.github.sangcomz.sample.compose
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -28,6 +27,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -35,7 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.sangcomz.stickytimelineview.compose.StickyTimeLineLazyRow
-import io.github.sangcomz.stickytimeline.compose.ui.theme.StickyTimeLineTheme
+import io.github.sangcomz.sample.compose.ui.theme.StickyTimeLineTheme
 import io.github.sangcomz.stickytimeline.data.Music
 import io.github.sangcomz.stickytimeline.data.MusicRepo
 import io.github.sangcomz.stickytimelineview.compose.StickyTimeLineLazyColumn
@@ -48,7 +50,9 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier
                         .fillMaxSize()
-                        .safeContentPadding(),
+                        .safeContentPadding().semantics {
+                            testTagsAsResourceId = true
+                        },
                 ) {
                     val musicList = MusicRepo().musicList
                     val sortedMusicList = musicList.sortedWith(
@@ -78,7 +82,9 @@ class MainActivity : ComponentActivity() {
                         }
 
                         StickyTimeLineLazyColumn(
-                            modifier = Modifier.weight(.5f),
+                            modifier = Modifier
+                                .weight(.5f)
+                                .testTag("sticky_timeline_lazy_column"),
                             items = sortedMusicList,
                             makeHeaderItem = { key, _ ->
                                 key
@@ -114,7 +120,7 @@ class MainActivity : ComponentActivity() {
                         StickyTimeLineLazyRow(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .weight(.5f),
+                                .weight(.5f).testTag("sticky_timeline_lazy_row"),
                             items = sortedMusicList,
                             lineColor = Color(0xff003E8F),
                             lineWidth = 2.dp,
@@ -214,7 +220,8 @@ fun MusicCardForLazyRow(music: Music) {
             Text(music.artist, style = MaterialTheme.typography.bodyMedium)
             Text(music.album, style = MaterialTheme.typography.bodySmall)
             Spacer(modifier = Modifier.height(4.dp))
-            Text(text = "${music.year} ${music.month} · ${music.genre}",
+            Text(
+                text = "${music.year} ${music.month} · ${music.genre}",
                 style = MaterialTheme.typography.bodySmall
             )
             Text(music.duration, style = MaterialTheme.typography.bodySmall)
@@ -234,7 +241,8 @@ fun MusicCardForLazyColumn(music: Music) {
             Text(music.artist, style = MaterialTheme.typography.bodyMedium)
             Text(music.album, style = MaterialTheme.typography.bodySmall)
             Spacer(modifier = Modifier.height(4.dp))
-            Text(text = "${music.year} ${music.month} · ${music.genre}",
+            Text(
+                text = "${music.year} ${music.month} · ${music.genre}",
                 style = MaterialTheme.typography.bodySmall
             )
             Text(music.duration, style = MaterialTheme.typography.bodySmall)

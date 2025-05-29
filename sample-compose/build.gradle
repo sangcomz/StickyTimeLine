@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace 'xyz.sangcomz.github.sample.compose'
+    namespace 'io.github.sangcomz.sample.compose'
     compileSdk 35
 
     defaultConfig {
-        applicationId "xyz.sangcomz.github.sample.compose"
+        applicationId "io.github.sangcomz.sample.compose"
         minSdk 21
         targetSdk 35
         versionCode 1
@@ -25,6 +25,12 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        benchmark {
+            initWith release
+            signingConfig signingConfigs.debug
+            matchingFallbacks = ['release']
+            debuggable false
         }
     }
 

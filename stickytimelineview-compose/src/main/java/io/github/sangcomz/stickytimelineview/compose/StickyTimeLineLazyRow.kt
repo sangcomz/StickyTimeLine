@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
@@ -20,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.SubcomposeLayout
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlin.math.max
@@ -65,7 +65,7 @@ fun <T, G> StickyTimeLineLazyRow(
         modifier = modifier.fillMaxWidth()
     ) {
         Column {
-            HeaderWithTimeLineOptimized(
+            HeaderWithTimeLine(
                 state = state,
                 groupedMap = groupedMap,
                 headerItemMap = headerItemMap,
@@ -91,7 +91,7 @@ fun <T, G> StickyTimeLineLazyRow(
 }
 
 @Composable
-fun <T, G> HeaderWithTimeLineOptimized(
+fun <T, G> HeaderWithTimeLine(
     state: LazyListState,
     groupedMap: Map<String, List<T>>,
     headerItemMap: Map<String, G>,
