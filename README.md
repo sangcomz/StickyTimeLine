@@ -7,6 +7,7 @@ StickyTimeLine is timeline view for android. Now supports both View system and J
 
 ## What's New? :tada:
 - [New] Jetpack Compose version released! 🎉
+- [New] Add benchmark module for performance measurement
 
  ## Result Screen
  

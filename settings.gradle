@@ -4,7 +4,7 @@ gradle.ext.set('versionCode', 11)
 gradle.ext.set('versionName', '1.1.0')
 
 gradle.ext.set('composeVersionCode', 1)
-gradle.ext.set('composeVersionName', '0.0.1')
+gradle.ext.set('composeVersionName', '0.1.0')
 
 gradle.ext.set('minSdk', 21)
 gradle.ext.set('targetSdk', 35)
